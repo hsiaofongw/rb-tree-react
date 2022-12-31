@@ -12,31 +12,10 @@ function App() {
       type: "text/javascript",
     });
     const myScriptUrl = URL.createObjectURL(fileObject);
-    const scriptImportMapEle = window.document.querySelector(
-      "script[type=importmap]"
-    );
-    const moduleAlias = "myScripts";
-    if (scriptImportMapEle) {
-      try {
-        if (scriptImportMapEle.textContent) {
-          const mapObject = JSON.parse(scriptImportMapEle.textContent);
-          if (mapObject && mapObject.imports) {
-            if (mapObject.imports[moduleAlias] === myScriptUrl) {
-              return;
-            }
-            mapObject.imports[moduleAlias] = myScriptUrl;
-            scriptImportMapEle.textContent = JSON.stringify(mapObject);
-            window.setTimeout(() => {
-              import("./" + fileName).then((res) => {
-                console.log("load:", res);
-              });
-            });
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    // see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
+    https: import(/* webpackIgnore: true */ myScriptUrl).then((res) => {
+      console.log("Script loaded:", res);
+    });
   }, []);
 
   return <Box>Hello</Box>;
