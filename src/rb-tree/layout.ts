@@ -1,7 +1,7 @@
 import { TreeNode } from "./types";
 import { isRed } from "./utils";
 
-export type Box = {
+type Box = {
   x: number;
   y: number;
   width: number;
@@ -25,7 +25,7 @@ const logInvalidNode = (path?: Direction[]) => {
 };
 
 /** 布局算法确定每一个节点的坐标 */
-export const doLayout = (
+const doLayout = (
   initX: number,
   initY: number,
   width: number,
@@ -144,7 +144,7 @@ export const doLayout = (
   }
 };
 
-export const layout = (
+const layout = (
   node: TreeNode<any, any>,
   initX: number,
   initY: number,
@@ -155,4 +155,77 @@ export const layout = (
   const container: LayoutContainer = { node };
   doLayout(initX, initY, width, height, rowGap, container, []);
   return container;
+};
+
+type TextBox = {
+  x: number;
+  y: number;
+  text: string;
+};
+
+type Point = { x: number; y: number };
+
+type Connection = {
+  from: Point;
+  to: Point;
+};
+
+type Graph = { textBoxes: TextBox[]; connections: Connection[] };
+
+type Vertex = LayoutContainer;
+
+type Edge = { from: Vertex; to: Vertex };
+
+type FlatLayout = {
+  vertices: Vertex[];
+  edges: Edge[];
+};
+
+const doFlatten = (container: LayoutContainer, flatLayout: FlatLayout) => {
+  if (container?.node) {
+    flatLayout.vertices.push(container);
+    if (container.node.left) {
+      flatLayout.edges.push({ from: container, to: container.left });
+    }
+    if (container.node.right) {
+      flatLayout.edges.push({ from: container, to: container.left });
+    }
+    doFlatten(container.left, flatLayout);
+    doFlatten(container.right, flatLayout);
+  }
+};
+
+const flatten = (container: LayoutContainer): FlatLayout => {
+  const flatLayout: FlatLayout = { vertices: [], edges: [] };
+  doFlatten(container, flatLayout);
+  return flatLayout;
+};
+
+const getCenter = (box: Box): Point => {
+  return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
+};
+
+const toGraph = (flatLayout: FlatLayout): Graph => {
+  const graph: Graph = { textBoxes: [], connections: [] };
+
+  for (const vertex of flatLayout.vertices) {
+    if (vertex?.node && vertex.box) {
+      const center = getCenter(vertex.box);
+      graph.textBoxes.push({
+        ...center,
+        text: String(vertex.node.key),
+      });
+    }
+  }
+
+  for (const edge of flatLayout.edges) {
+    if (edge.from?.box && edge.to?.box) {
+      graph.connections.push({
+        from: getCenter(edge.from.box),
+        to: getCenter(edge.to.box),
+      });
+    }
+  }
+
+  return graph;
 };
