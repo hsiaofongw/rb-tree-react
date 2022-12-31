@@ -102,3 +102,52 @@ export const deleteRootNode = <KeyT, ValueT>(
     return root.right;
   }
 };
+
+export const deleteNode = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>,
+  key: KeyT
+): TreeNode<KeyT, ValueT> => {
+  if (root) {
+    if (key < root.key) {
+      const goLeft = (node: TreeNode<KeyT, ValueT>) => {
+        if (node) {
+          node.left = deleteNode(node.left, key);
+          return reconcile(node);
+        }
+      };
+
+      if (isRed(root.left) || isRed(root.left?.left)) {
+        return goLeft(root);
+      }
+
+      if (isRed(root.right?.left)) {
+        return goLeft(moveRightSibilingToLeft(root));
+      }
+
+      return goLeft(unSplit(root));
+    } else if (key > root.key) {
+      const goRight = (node: TreeNode<KeyT, ValueT>) => {
+        if (node) {
+          node.right = deleteNode(node.right, key);
+          return reconcile(node);
+        }
+      };
+
+      if (isRed(root.right) || isRed(root.right?.left)) {
+        return goRight(root);
+      }
+
+      if (isRed(root.left)) {
+        return goRight(rotateRight(root));
+      }
+
+      if (isRed(root.left?.left)) {
+        return goRight(moveLeftSibilingToRight(root));
+      }
+
+      return goRight(unSplit(root));
+    } else {
+      return deleteRootNode(root);
+    }
+  }
+};
