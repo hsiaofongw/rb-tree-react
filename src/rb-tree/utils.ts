@@ -1,8 +1,11 @@
-import { TreeNodeT } from "./types";
+import { TreeNode } from "./types";
 
-export const isRed = (node: TreeNodeT): boolean => !!node?.isRed;
+export const isRed = <KeyT, ValueT>(node: TreeNode<KeyT, ValueT>): boolean =>
+  !!node?.isRed;
 
-export const rotateRight = (root: TreeNodeT): TreeNodeT => {
+export const rotateRight = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (root?.left) {
     let newRoot = root.left;
     root.left = newRoot.right;
@@ -13,7 +16,9 @@ export const rotateRight = (root: TreeNodeT): TreeNodeT => {
   }
 };
 
-export const rotateLeft = (root: TreeNodeT): TreeNodeT => {
+export const rotateLeft = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (root?.right) {
     let newRoot = root.right;
     root.right = newRoot.left;
@@ -24,7 +29,9 @@ export const rotateLeft = (root: TreeNodeT): TreeNodeT => {
   }
 };
 
-export const split = (root: TreeNodeT): TreeNodeT => {
+export const split = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (root) {
     root.isRed = true;
     if (root.left) {
@@ -37,7 +44,9 @@ export const split = (root: TreeNodeT): TreeNodeT => {
   }
 };
 
-export const reconcile = (root: TreeNodeT): TreeNodeT => {
+export const reconcile = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (!isRed(root?.left) && isRed(root?.right)) {
     root = rotateLeft(root);
   }
@@ -51,7 +60,9 @@ export const reconcile = (root: TreeNodeT): TreeNodeT => {
   return root;
 };
 
-export const unSplit = (root: TreeNodeT): TreeNodeT => {
+export const unSplit = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (root) {
     root.isRed = false;
     if (root.left) {
@@ -64,7 +75,9 @@ export const unSplit = (root: TreeNodeT): TreeNodeT => {
   }
 };
 
-export const moveLeftSibilingToRight = (root: TreeNodeT): TreeNodeT => {
+export const moveLeftSibilingToRight = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   root = unSplit(root);
   root = rotateRight(root);
   root = split(root);
@@ -74,7 +87,9 @@ export const moveLeftSibilingToRight = (root: TreeNodeT): TreeNodeT => {
   return root;
 };
 
-export const moveRightSibilingToLeft = (root: TreeNodeT): TreeNodeT => {
+export const moveRightSibilingToLeft = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => {
   if (root) {
     root.right = rotateLeft(root.left);
     root = unSplit(root);
