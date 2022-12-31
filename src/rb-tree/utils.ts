@@ -1,8 +1,8 @@
-import { NodeT } from "./types";
+import { TreeNodeT } from "./types";
 
-export const isRed = (node: NodeT): boolean => !!node?.isRed;
+export const isRed = (node: TreeNodeT): boolean => !!node?.isRed;
 
-export const rotateRight = (root: NodeT): NodeT => {
+export const rotateRight = (root: TreeNodeT): TreeNodeT => {
   if (root?.left) {
     let newRoot = root.left;
     root.left = newRoot.right;
@@ -13,7 +13,7 @@ export const rotateRight = (root: NodeT): NodeT => {
   }
 };
 
-export const rotateLeft = (root: NodeT): NodeT => {
+export const rotateLeft = (root: TreeNodeT): TreeNodeT => {
   if (root?.right) {
     let newRoot = root.right;
     root.right = newRoot.left;
@@ -24,7 +24,7 @@ export const rotateLeft = (root: NodeT): NodeT => {
   }
 };
 
-export const split = (root: NodeT): NodeT => {
+export const split = (root: TreeNodeT): TreeNodeT => {
   if (root) {
     root.isRed = true;
     if (root.left) {
@@ -37,7 +37,7 @@ export const split = (root: NodeT): NodeT => {
   }
 };
 
-export const reconcile = (root: NodeT): NodeT => {
+export const reconcile = (root: TreeNodeT): TreeNodeT => {
   if (!isRed(root?.left) && isRed(root?.right)) {
     root = rotateLeft(root);
   }
@@ -51,7 +51,7 @@ export const reconcile = (root: NodeT): NodeT => {
   return root;
 };
 
-export const unSplit = (root: NodeT): NodeT => {
+export const unSplit = (root: TreeNodeT): TreeNodeT => {
   if (root) {
     root.isRed = false;
     if (root.left) {
@@ -64,7 +64,7 @@ export const unSplit = (root: NodeT): NodeT => {
   }
 };
 
-export const moveLeftSibilingToRight = (root: NodeT): NodeT => {
+export const moveLeftSibilingToRight = (root: TreeNodeT): TreeNodeT => {
   root = unSplit(root);
   root = rotateRight(root);
   root = split(root);
@@ -74,7 +74,7 @@ export const moveLeftSibilingToRight = (root: NodeT): NodeT => {
   return root;
 };
 
-export const moveRightSibilingToLeft = (root: NodeT): NodeT => {
+export const moveRightSibilingToLeft = (root: TreeNodeT): TreeNodeT => {
   if (root) {
     root.right = rotateLeft(root.left);
     root = unSplit(root);
