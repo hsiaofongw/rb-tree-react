@@ -20,3 +20,7 @@ export const findNodeByKey = <KeyT, ValueT>(
 export const getMin = <KeyT, ValueT>(
   root: TreeNode<KeyT, ValueT>
 ): TreeNode<KeyT, ValueT> => (root?.left ? getMin(root?.left) : root);
+
+export const getMax = <KeyT, ValueT>(
+  root: TreeNode<KeyT, ValueT>
+): TreeNode<KeyT, ValueT> => (root?.right ? getMax(root?.right) : root);
