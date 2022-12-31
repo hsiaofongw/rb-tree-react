@@ -1,5 +1,7 @@
 import { TreeNode } from "./types";
 import { isRed } from "./utils";
+import { select } from "d3";
+const svgNs = "http://www.w3.org/2000/svg";
 
 type Box = {
   x: number;
@@ -18,6 +20,30 @@ type LayoutContainer =
       right?: LayoutContainer;
     }
   | undefined;
+
+type TextBox = {
+  x: number;
+  y: number;
+  text: string;
+};
+
+type Point = { x: number; y: number };
+
+type Connection = {
+  from: Point;
+  to: Point;
+};
+
+type Graph = { textBoxes: TextBox[]; connections: Connection[] };
+
+type Vertex = LayoutContainer;
+
+type Edge = { from: Vertex; to: Vertex };
+
+type FlatLayout = {
+  vertices: Vertex[];
+  edges: Edge[];
+};
 
 const logInvalidNode = (path?: Direction[]) => {
   console.error("Invalid node, path is:", path);
@@ -144,7 +170,7 @@ const doLayout = (
   }
 };
 
-const layout = (
+const createLayoutContainer = (
   node: TreeNode<any, any>,
   initX: number,
   initY: number,
@@ -155,30 +181,6 @@ const layout = (
   const container: LayoutContainer = { node };
   doLayout(initX, initY, width, height, rowGap, container, []);
   return container;
-};
-
-type TextBox = {
-  x: number;
-  y: number;
-  text: string;
-};
-
-type Point = { x: number; y: number };
-
-type Connection = {
-  from: Point;
-  to: Point;
-};
-
-type Graph = { textBoxes: TextBox[]; connections: Connection[] };
-
-type Vertex = LayoutContainer;
-
-type Edge = { from: Vertex; to: Vertex };
-
-type FlatLayout = {
-  vertices: Vertex[];
-  edges: Edge[];
 };
 
 const doFlatten = (container: LayoutContainer, flatLayout: FlatLayout) => {
@@ -195,7 +197,7 @@ const doFlatten = (container: LayoutContainer, flatLayout: FlatLayout) => {
   }
 };
 
-const flatten = (container: LayoutContainer): FlatLayout => {
+const createFlatLayout = (container: LayoutContainer): FlatLayout => {
   const flatLayout: FlatLayout = { vertices: [], edges: [] };
   doFlatten(container, flatLayout);
   return flatLayout;
@@ -205,7 +207,7 @@ const getCenter = (box: Box): Point => {
   return { x: box.x + box.width / 2, y: box.y + box.height / 2 };
 };
 
-const toGraph = (flatLayout: FlatLayout): Graph => {
+const createGraph = (flatLayout: FlatLayout): Graph => {
   const graph: Graph = { textBoxes: [], connections: [] };
 
   for (const vertex of flatLayout.vertices) {
@@ -228,4 +230,86 @@ const toGraph = (flatLayout: FlatLayout): Graph => {
   }
 
   return graph;
+};
+
+export const paint = (
+  svgElement: SVGElement,
+  node: TreeNode<any, any>,
+  width: number,
+  height: number,
+  rowGap: number,
+  fontSizePx: number
+): void => {
+  const layoutContainer = createLayoutContainer(
+    node,
+    0,
+    0,
+    width,
+    height,
+    rowGap
+  );
+
+  const flatLayout = createFlatLayout(layoutContainer);
+
+  const graph = createGraph(flatLayout);
+
+  const arrowClassName = "arrow";
+  const arrowSelector = `.${arrowClassName}`;
+  select(svgElement)
+    .selectAll(arrowSelector)
+    .data(graph.connections)
+    .join((enter) =>
+      enter
+        .append(function (connection: Connection) {
+          const arrowElement = window.document.createElementNS(svgNs, "line");
+          arrowElement.setAttribute("x1", connection.from.x.toString());
+          arrowElement.setAttribute("y1", connection.from.y.toString());
+          arrowElement.setAttribute("x2", connection.to.x.toString());
+          arrowElement.setAttribute("y2", connection.to.y.toString());
+          return arrowElement;
+        })
+        .classed(arrowClassName, true)
+    );
+
+  const circleClassName = "circle";
+  const circleSelector = `.${circleClassName}`;
+  select(svgElement)
+    .selectAll(circleSelector)
+    .data(graph.textBoxes)
+    .join((enter) =>
+      enter
+        .append(function (tb: TextBox) {
+          const circleEle = window.document.createElementNS(svgNs, "circle");
+          circleEle.setAttribute("cx", tb.x.toString());
+          circleEle.setAttribute("cy", tb.y.toString());
+          circleEle.setAttribute("r", fontSizePx.toString());
+          circleEle.setAttribute("stroke", "none");
+          circleEle.setAttribute("fill", "#ffffff");
+          return circleEle;
+        })
+        .classed(circleClassName, true)
+    );
+
+  const textBoxClassName = "textbox";
+  const textBoxSelector = `.${textBoxClassName}`;
+  select(svgElement)
+    .selectAll(textBoxSelector)
+    .data(graph.textBoxes)
+    .join((enter) =>
+      enter
+        .append(function (tb: TextBox) {
+          const textElement = window.document.createElementNS(svgNs, "text");
+          textElement.setAttribute("x", tb.x.toString());
+          textElement.setAttribute("y", tb.y.toString());
+          textElement.textContent = tb.text;
+          textElement.setAttribute("text-anchor", "middle");
+          textElement.setAttribute("alignment-baseline", "central");
+          textElement.setAttribute(
+            "style",
+            `font-size: ${fontSizePx}px; cursor: inherit;`
+          );
+          return textElement;
+        })
+        .classed(textBoxSelector, true)
+    );
 };
