@@ -1,6 +1,6 @@
 import { TreeNode } from "./types";
 
-export const findNodeByKey = <KeyT, ValueT>(
+export const findNode = <KeyT, ValueT>(
   root: TreeNode<KeyT, ValueT>,
   key: KeyT
 ): TreeNode<KeyT, ValueT> => {
@@ -9,9 +9,9 @@ export const findNodeByKey = <KeyT, ValueT>(
   }
 
   if (key < root.key) {
-    return findNodeByKey(root.left, key);
+    return findNode(root.left, key);
   } else if (key > root.key) {
-    return findNodeByKey(root.right, key);
+    return findNode(root.right, key);
   } else {
     return root;
   }
