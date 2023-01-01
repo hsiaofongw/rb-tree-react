@@ -36,7 +36,7 @@ export const Editor = (props: {
       instance.getModel()?.onDidChangeContent(() => props.onChange?.());
 
       if (props.revealLine !== undefined) {
-        instance.revealLineInCenter(props.revealLine);
+        instance.revealLineNearTop(props.revealLine);
       }
 
       props.onLoaded?.();
