@@ -4,38 +4,7 @@ import { Box } from "@mui/material";
 import { editor } from "monaco-editor";
 import { useQuery } from "react-query";
 import axios from "axios";
-
-const Editor = (props: {
-  editorRef?: MutableRefObject<editor.IStandaloneCodeEditor | undefined>;
-  initialValue?: string;
-  onChange?: () => void;
-}) => {
-  const editorEleRef = useRef<HTMLDivElement>();
-  const editorInstanceRef = useRef<editor.IStandaloneCodeEditor>();
-  useEffect(() => {
-    if (!editorInstanceRef.current) {
-      if (editorEleRef.current) {
-        const instance = editor.create(editorEleRef.current, {
-          value: props.initialValue || "",
-          language: "typescript",
-        });
-
-        editorInstanceRef.current = instance;
-        if (props.editorRef) {
-          props.editorRef.current = instance;
-        }
-
-        instance.getModel()?.onDidChangeContent(() => props.onChange?.());
-      }
-    }
-  });
-
-  useEffect(() => {
-    editorInstanceRef.current?.setValue(props.initialValue || "");
-  }, [props.initialValue]);
-
-  return <Box sx={{ height: "100%" }} ref={editorEleRef}></Box>;
-};
+import { Editor } from "./components/editor";
 
 export const Home = () => {
   useEffect(() => {
@@ -51,29 +20,17 @@ export const Home = () => {
     });
   }, []);
 
-  const templateFilename = "template.ts";
-  const { data: templateData } = useQuery([], () =>
-    axios.get(templateFilename).then((res) => res.data)
-  );
+  // const templateFilename = "template.ts";
+  // const { data: templateData } = useQuery([], () =>
+  //   axios.get(templateFilename).then((res) => res.data)
+  // );
 
-  const editorRef = useRef<editor.IStandaloneCodeEditor>();
+  // const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
   return (
     <Box sx={{ height: "100vh", boxSizing: "border-box", display: "flex" }}>
       <Box sx={{ flex: 1 }}></Box>
-      <Box sx={{ flex: 1 }}>
-        <Editor
-          onChange={() => {
-            if (editorRef) {
-              if (editorRef.current) {
-                console.log("Changed:", editorRef.current.getValue());
-              }
-            }
-          }}
-          editorRef={editorRef}
-          initialValue={templateData ?? ""}
-        />
-      </Box>
+      <Box sx={{ flex: 1 }}></Box>
     </Box>
   );
 };
