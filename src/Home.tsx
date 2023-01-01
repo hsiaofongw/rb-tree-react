@@ -31,7 +31,7 @@ export const Home = () => {
     setTsContent(templateData);
   }, [templateData]);
 
-  const targetLinePrefix = "const root:";
+  const targetLinePrefix = "// Start user codes";
   const { revealLine } = useRevealLineIdx(targetLinePrefix, templateData ?? "");
 
   return (
