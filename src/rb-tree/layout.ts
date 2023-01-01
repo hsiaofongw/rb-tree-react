@@ -1,7 +1,7 @@
 import { TreeNode } from "./types";
 import { isRed } from "./utils";
 import { select } from "d3";
-const svgNs = "http://www.w3.org/2000/svg";
+import { svgNs } from "../resources/namespaces";
 
 type Box = {
   x: number;
