@@ -9,7 +9,7 @@ export const useTreeNode = (): {
   isLoading: boolean;
 } => {
   const [root, setRoot] = useState<TreeNode<string, string>>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>();
   const setTsContent = (tsContent: string) => {
     setIsLoading(true);
     if (tsContent) {
@@ -22,15 +22,13 @@ export const useTreeNode = (): {
             setRoot(res.default);
           })
           .finally(() => {
-            window.setTimeout(() => setIsLoading(false), 2000);
             setIsLoading(false);
           });
         return;
       }
     }
     setRoot(undefined);
-    // setIsLoading(false);
-    window.setTimeout(() => setIsLoading(false), 2000);
+    setIsLoading(false);
   };
-  return { root, setTsContent, isLoading };
+  return { root, setTsContent, isLoading: !!isLoading };
 };
