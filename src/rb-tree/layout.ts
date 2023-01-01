@@ -68,13 +68,15 @@ type InternalLayoutContainerCreateOptions = LayoutContainerCreateOptions & {
 
 /** 布局算法确定每一个节点的坐标 */
 const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
+  const diameter = option.fontSizePx * 2;
+  const halfWidth = (option.width - diameter) / 2;
   if (option.layoutContainer?.node) {
     const node = option.layoutContainer.node;
     if (isRed(node.left) && isRed(node.right)) {
       option.layoutContainer.box = {
-        x: option.initX + option.width / 3,
+        x: option.initX + halfWidth,
         y: option.initY,
-        width: option.width / 3,
+        width: diameter,
         height: option.height,
       };
 
@@ -90,7 +92,7 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       option.layoutContainer.left = { node: node.left };
       doLayout({
         ...option,
-        width: option.width / 3,
+        width: halfWidth,
         path: option.path.concat(["left"]),
         layoutContainer: option.layoutContainer.left,
       });
@@ -98,16 +100,16 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       option.layoutContainer.right = { node: node.right };
       doLayout({
         ...option,
-        initX: option.initX + (2 * option.width) / 3,
-        width: option.width / 3,
+        initX: option.initX + halfWidth + diameter,
+        width: halfWidth,
         path: option.path.concat(["right"]),
         layoutContainer: option.layoutContainer.right,
       });
     } else if (isRed(node.left)) {
       option.layoutContainer.box = {
-        x: option.initX + option.width / 2,
+        x: option.initX + halfWidth,
         y: option.initY,
-        width: option.width / 2,
+        width: diameter,
         height: option.height,
       };
 
@@ -118,24 +120,24 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       option.layoutContainer.left = { node: node.left };
       doLayout({
         ...option,
-        width: option.width / 2 + option.width / 4,
+        width: halfWidth,
         layoutContainer: option.layoutContainer.left,
         path: option.path.concat(["left"]),
       });
       option.layoutContainer.right = { node: node.right };
       doLayout({
         ...option,
-        initX: option.initX + option.width / 2 + option.width / 4,
+        initX: option.initX + halfWidth + diameter,
         initY: option.initY + option.height,
-        width: option.width / 2 - option.width / 4,
+        width: halfWidth,
         path: option.path.concat(["right"]),
         layoutContainer: option.layoutContainer.right,
       });
     } else if (isRed(node.right)) {
       option.layoutContainer.box = {
-        x: option.initX,
+        x: option.initX + halfWidth,
         y: option.initY,
-        width: option.width / 2,
+        width: diameter,
         height: option.height,
       };
 
@@ -147,7 +149,7 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       doLayout({
         ...option,
         initY: option.initY + option.height,
-        width: option.width / 2,
+        width: halfWidth,
         layoutContainer: option.layoutContainer.left,
         path: option.path.concat(["left"]),
       });
@@ -155,8 +157,8 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       option.layoutContainer.right = { node: node.right };
       doLayout({
         ...option,
-        initX: option.initX + option.width / 2,
-        width: option.width / 2,
+        initX: option.initX + halfWidth + diameter,
+        width: halfWidth,
         layoutContainer: option.layoutContainer.right,
         path: option.path.concat(["right"]),
       });
@@ -171,15 +173,16 @@ const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
       doLayout({
         ...option,
         initY: option.initY + option.height,
-        width: option.width / 2,
+        width: halfWidth,
         layoutContainer: option.layoutContainer.left,
         path: option.path.concat(["left"]),
       });
       option.layoutContainer.right = { node: node.right };
       doLayout({
         ...option,
-        initX: option.initX + option.width / 2,
-        width: option.width / 2,
+        initX: option.initX + halfWidth + diameter,
+        initY: option.initY + option.height,
+        width: halfWidth,
         layoutContainer: option.layoutContainer.right,
         path: option.path.concat(["right"]),
       });
@@ -275,6 +278,7 @@ export const paint = (
     0
   );
   svgElement.setAttribute("height", maxHeight.toString());
+  svgElement.setAttribute("width", width.toString());
 
   const graph = createGraph(flatLayout);
 
