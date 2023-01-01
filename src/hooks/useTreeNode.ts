@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 import ts from "typescript";
 import { TreeNode } from "../rb-tree/types";
 import { loadScript } from "../utils/loadScript";
