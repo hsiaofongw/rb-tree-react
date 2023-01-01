@@ -153,7 +153,19 @@ export const insertPair = <KeyT, ValueT>(
 
 let root: TreeNode<string, string> = {
   isRed: false,
-  key: "a",
+  key: "c",
+  left: {
+    isRed: false,
+    key: "b",
+    left: {
+      isRed: true,
+      key: "a",
+    },
+  },
+  right: {
+    isRed: false,
+    key: "d",
+  },
 };
 
 // ========
