@@ -10,7 +10,7 @@ export const Tree = (props: { root: TreeNode<string, string> }) => {
   useEffect(() => {
     const svgSelection = create("svg");
     const svgElement = asNonNullable(svgSelection.node());
-    paint(svgElement, props.root, 400, 100, 16);
+    paint(svgElement, props.root, divRef.current?.clientWidth ?? 100, 80, 16);
 
     divRef.current?.appendChild(svgElement);
 
