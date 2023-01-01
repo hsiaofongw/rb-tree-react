@@ -212,7 +212,7 @@ const doFlatten = (container: LayoutContainer, flatLayout: FlatLayout) => {
       flatLayout.edges.push({ from: container, to: container.left });
     }
     if (container.node.right) {
-      flatLayout.edges.push({ from: container, to: container.left });
+      flatLayout.edges.push({ from: container, to: container.right });
     }
     doFlatten(container.left, flatLayout);
     doFlatten(container.right, flatLayout);
