@@ -12,6 +12,7 @@ import { downloadFile, getEscapedTimestamp } from "./utils/downloadFile";
 import { Resizable } from "re-resizable";
 import IconButton from "@mui/material/IconButton";
 import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
+import { HelpEntry } from "./components/HelpEntry";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -109,11 +110,7 @@ export const Home = () => {
                 Export Code
               </Button>
 
-              <Tooltip placement="top" title={"Click for help"}>
-                <IconButton>
-                  <HelpOutlineOutlinedIcon />
-                </IconButton>
-              </Tooltip>
+              <HelpEntry />
             </Stack>
           </Box>
         </Box>
