@@ -7,6 +7,7 @@ export const Editor = (props: {
   editorRef?: MutableRefObject<editor.IStandaloneCodeEditor | undefined>;
   initialValue?: string;
   onChange?: () => void;
+  onLoaded?: () => void;
 }) => {
   const indentSize = props.indentSize ?? 2;
   const editorEleRef = useRef<HTMLDivElement>();
@@ -26,6 +27,7 @@ export const Editor = (props: {
         }
 
         instance.getModel()?.onDidChangeContent(() => props.onChange?.());
+        props.onLoaded?.();
       }
     }
   });
