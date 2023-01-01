@@ -2,27 +2,24 @@ import { useEffect, useRef } from "react";
 import "./App.css";
 import { Box } from "@mui/material";
 import { editor } from "monaco-editor";
-import { useQuery } from "react-query";
-import axios from "axios";
-import { Editor } from "./components/editor";
+import { Editor } from "./components/Editor";
 import { useTreeNode } from "./hooks/useTreeNode";
+import { useTsTemplateContent } from "./hooks/useTsTemplateContent";
+import { Tree } from "./components/Tree";
 
 export const Home = () => {
-  const templateFilename = "template.ts";
-  const { data: templateData } = useQuery([templateFilename], () =>
-    axios.get(templateFilename).then((res) => res.data)
-  );
-
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const [root, setTsContent] = useTreeNode();
-
+  const { data: templateData } = useTsTemplateContent();
   useEffect(() => {
     setTsContent(templateData);
   }, [templateData]);
 
   return (
     <Box sx={{ height: "100vh", boxSizing: "border-box", display: "flex" }}>
-      <Box sx={{ flex: 1 }}></Box>
+      <Box sx={{ flex: 1 }}>
+        <Tree root={root} />
+      </Box>
       <Box sx={{ flex: 1 }}>
         <Editor
           editorRef={editorRef}

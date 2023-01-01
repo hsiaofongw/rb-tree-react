@@ -32,6 +32,7 @@ type Point = { x: number; y: number };
 type Connection = {
   from: Point;
   to: Point;
+  color: string;
 };
 
 type Graph = { textBoxes: TextBox[]; connections: Connection[] };
@@ -116,11 +117,21 @@ const doLayout = (
       doLayout(
         initX,
         initY,
-        width / 2,
+        width / 2 + width / 4,
         height,
         rowGap,
         layoutContainer.left,
         path.concat(["left"])
+      );
+      layoutContainer.right = { node: node.right };
+      doLayout(
+        initX + width / 2 + width / 4,
+        initY + rowGap,
+        width / 2,
+        height,
+        rowGap,
+        layoutContainer.right,
+        path.concat(["right"])
       );
     } else if (isRed(node.right)) {
       layoutContainer.box = {
@@ -133,6 +144,17 @@ const doLayout = (
       if (isRed(node.right?.left) || isRed(node.right?.left)) {
         logInvalidNode(path);
       }
+
+      layoutContainer.left = { node: node.left };
+      doLayout(
+        initX,
+        initY + rowGap,
+        width / 2,
+        height,
+        rowGap,
+        layoutContainer.left,
+        path.concat(["left"])
+      );
 
       layoutContainer.right = { node: node.right };
       doLayout(
@@ -149,9 +171,9 @@ const doLayout = (
       layoutContainer.left = { node: node.left };
       doLayout(
         initX,
-        initY,
+        initY + rowGap,
         width / 2,
-        height + rowGap,
+        height,
         rowGap,
         layoutContainer.left,
         path.concat(["left"])
@@ -159,9 +181,9 @@ const doLayout = (
       layoutContainer.right = { node: node.right };
       doLayout(
         initX + width / 2,
-        initY,
+        initY + rowGap,
         width / 2,
-        height + rowGap,
+        height,
         rowGap,
         layoutContainer.right,
         path.concat(["right"])
@@ -225,6 +247,7 @@ const createGraph = (flatLayout: FlatLayout): Graph => {
       graph.connections.push({
         from: getCenter(edge.from.box),
         to: getCenter(edge.to.box),
+        color: edge.to.node?.isRed ? "red" : "black",
       });
     }
   }
@@ -266,6 +289,7 @@ export const paint = (
           arrowElement.setAttribute("y1", connection.from.y.toString());
           arrowElement.setAttribute("x2", connection.to.x.toString());
           arrowElement.setAttribute("y2", connection.to.y.toString());
+          arrowElement.setAttribute("stroke", connection.color);
           return arrowElement;
         })
         .classed(arrowClassName, true)
