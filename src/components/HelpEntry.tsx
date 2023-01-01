@@ -32,13 +32,19 @@ export const HelpEntry = () => {
           <Typography gutterBottom>
             This is a Data Structure Visulization platform, it can display the
             instance of some obscure and sophisticated data structures in a
-            human-friendly manner. You can write code to manipulate the
-            instance, you can see the result after click the 'Execute' button.
-            Besides, this tool can help you with checking your understanding of
-            the data structure.
+            human-friendly manner.
           </Typography>
 
-          <Typography gutterBottom variant="h5">
+          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h5">
+            How can I use this?
+          </Typography>
+          <Typography gutterBottom>
+            You can write code to manipulate the instance, you can see the
+            result after click the 'Execute' button.Besides, this tool can help
+            you with checking your understanding of the data structure.
+          </Typography>
+
+          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h5">
             Is this Open-Source?
           </Typography>
           <Typography gutterBottom>
