@@ -9,7 +9,7 @@ import { Tree } from "./components/Tree";
 
 export const Home = () => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
-  const [root, setTsContent] = useTreeNode();
+  const { root, setTsContent, isLoading } = useTreeNode();
   const { data: templateData } = useTsTemplateContent();
   useEffect(() => {
     setTsContent(templateData);
@@ -22,9 +22,10 @@ export const Home = () => {
       </Box>
       <Box sx={{ flex: 1 }}>
         <Editor
+          isLoading={isLoading}
           editorRef={editorRef}
           initialValue={templateData ?? ""}
-          onChange={() => {
+          onExecute={() => {
             const value = editorRef.current?.getValue() ?? "";
             setTsContent(value);
           }}

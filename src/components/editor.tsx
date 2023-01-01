@@ -1,6 +1,8 @@
 import { MutableRefObject, useEffect, useRef } from "react";
 import { editor } from "monaco-editor";
-import { Box } from "@mui/material";
+import { Box, Button, Stack } from "@mui/material";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 export const Editor = (props: {
   indentSize?: number;
@@ -8,6 +10,8 @@ export const Editor = (props: {
   initialValue?: string;
   onChange?: () => void;
   onLoaded?: () => void;
+  onExecute?: () => void;
+  isLoading?: boolean;
 }) => {
   const indentSize = props.indentSize ?? 2;
   const editorEleRef = useRef<HTMLDivElement>();
@@ -19,6 +23,7 @@ export const Editor = (props: {
           value: props.initialValue || "",
           language: "typescript",
           tabSize: indentSize,
+          automaticLayout: true,
         });
 
         editorInstanceRef.current = instance;
@@ -36,5 +41,22 @@ export const Editor = (props: {
     editorInstanceRef.current?.setValue(props.initialValue || "");
   }, [props.initialValue]);
 
-  return <Box sx={{ height: "100%" }} ref={editorEleRef}></Box>;
+  return (
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+      <Box sx={{ flex: "1", minHeight: "100px" }} ref={editorEleRef}></Box>
+      <Box sx={{ height: "100px" }}>
+        <Stack sx={{ padding: "20px" }} direction={"row"} spacing={2}>
+          <LoadingButton
+            loading={props.isLoading}
+            loadingPosition="start"
+            startIcon={<SaveIcon />}
+            variant="contained"
+            onClick={() => props.onExecute?.()}
+          >
+            Execute
+          </LoadingButton>
+        </Stack>
+      </Box>
+    </Box>
+  );
 };
