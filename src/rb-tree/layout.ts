@@ -2,6 +2,7 @@ import { TreeNode } from "./types";
 import { isRed } from "./utils";
 import { select } from "d3";
 import { svgNs } from "../resources/namespaces";
+import { asNonNullable } from "../utils/typeUtils";
 
 type Box = {
   x: number;
@@ -51,24 +52,30 @@ const logInvalidNode = (path?: Direction[]) => {
   throw new Error("Invalid node");
 };
 
+type LayoutContainerCreateOptions = {
+  node: TreeNode<any, any>;
+  initX: number;
+  initY: number;
+  width: number;
+  height: number;
+  fontSizePx: number;
+};
+
+type InternalLayoutContainerCreateOptions = LayoutContainerCreateOptions & {
+  path: Direction[];
+  layoutContainer: LayoutContainer;
+};
+
 /** 布局算法确定每一个节点的坐标 */
-const doLayout = (
-  initX: number,
-  initY: number,
-  width: number,
-  height: number,
-  rowGap: number,
-  layoutContainer: LayoutContainer,
-  path: Direction[]
-): void => {
-  if (layoutContainer?.node) {
-    const node = layoutContainer.node;
+const doLayout = (option: InternalLayoutContainerCreateOptions): void => {
+  if (option.layoutContainer?.node) {
+    const node = option.layoutContainer.node;
     if (isRed(node.left) && isRed(node.right)) {
-      layoutContainer.box = {
-        x: initX + width / 3,
-        y: initY,
-        width: width / 3,
-        height: height,
+      option.layoutContainer.box = {
+        x: option.initX + option.width / 3,
+        y: option.initY,
+        width: option.width / 3,
+        height: option.height,
       };
 
       if (
@@ -77,131 +84,114 @@ const doLayout = (
         isRed(node.right?.left) ||
         isRed(node.right?.right)
       ) {
-        logInvalidNode(path);
+        logInvalidNode(option.path);
       }
 
-      layoutContainer.left = { node: node.left };
-      doLayout(
-        initX,
-        initY,
-        width / 3,
-        height,
-        rowGap,
-        layoutContainer.left,
-        path.concat(["left"])
-      );
+      option.layoutContainer.left = { node: node.left };
+      doLayout({
+        ...option,
+        width: option.width / 3,
+        path: option.path.concat(["left"]),
+        layoutContainer: option.layoutContainer.left,
+      });
 
-      layoutContainer.right = { node: node.right };
-      doLayout(
-        initX + (2 * width) / 3,
-        initY,
-        width / 3,
-        height,
-        rowGap,
-        layoutContainer.right,
-        path.concat(["right"])
-      );
+      option.layoutContainer.right = { node: node.right };
+      doLayout({
+        ...option,
+        initX: option.initX + (2 * option.width) / 3,
+        width: option.width / 3,
+        path: option.path.concat(["right"]),
+        layoutContainer: option.layoutContainer.right,
+      });
     } else if (isRed(node.left)) {
-      layoutContainer.box = {
-        x: initX + width / 2,
-        y: initY,
-        width: width / 2,
-        height: height,
+      option.layoutContainer.box = {
+        x: option.initX + option.width / 2,
+        y: option.initY,
+        width: option.width / 2,
+        height: option.height,
       };
 
       if (isRed(node.left?.left) || isRed(node.left?.right)) {
-        logInvalidNode(path);
+        logInvalidNode(option.path);
       }
 
-      layoutContainer.left = { node: node.left };
-      doLayout(
-        initX,
-        initY,
-        width / 2 + width / 4,
-        height,
-        rowGap,
-        layoutContainer.left,
-        path.concat(["left"])
-      );
-      layoutContainer.right = { node: node.right };
-      doLayout(
-        initX + width / 2 + width / 4,
-        initY + rowGap,
-        width / 2,
-        height,
-        rowGap,
-        layoutContainer.right,
-        path.concat(["right"])
-      );
+      option.layoutContainer.left = { node: node.left };
+      doLayout({
+        ...option,
+        width: option.width / 2 + option.width / 4,
+        layoutContainer: option.layoutContainer.left,
+        path: option.path.concat(["left"]),
+      });
+      option.layoutContainer.right = { node: node.right };
+      doLayout({
+        ...option,
+        initX: option.initX + option.width / 2 + option.width / 4,
+        initY: option.initY + option.height,
+        width: option.width / 2 - option.width / 4,
+        path: option.path.concat(["right"]),
+        layoutContainer: option.layoutContainer.right,
+      });
     } else if (isRed(node.right)) {
-      layoutContainer.box = {
-        x: initX,
-        y: initY,
-        width: width / 2,
-        height: height,
+      option.layoutContainer.box = {
+        x: option.initX,
+        y: option.initY,
+        width: option.width / 2,
+        height: option.height,
       };
 
       if (isRed(node.right?.left) || isRed(node.right?.left)) {
-        logInvalidNode(path);
+        logInvalidNode(option.path);
       }
 
-      layoutContainer.left = { node: node.left };
-      doLayout(
-        initX,
-        initY + rowGap,
-        width / 2,
-        height,
-        rowGap,
-        layoutContainer.left,
-        path.concat(["left"])
-      );
+      option.layoutContainer.left = { node: node.left };
+      doLayout({
+        ...option,
+        initY: option.initY + option.height,
+        width: option.width / 2,
+        layoutContainer: option.layoutContainer.left,
+        path: option.path.concat(["left"]),
+      });
 
-      layoutContainer.right = { node: node.right };
-      doLayout(
-        initX + width / 2,
-        initY,
-        width / 2,
-        height,
-        rowGap,
-        layoutContainer.right,
-        path.concat(["right"])
-      );
+      option.layoutContainer.right = { node: node.right };
+      doLayout({
+        ...option,
+        initX: option.initX + option.width / 2,
+        width: option.width / 2,
+        layoutContainer: option.layoutContainer.right,
+        path: option.path.concat(["right"]),
+      });
     } else {
-      layoutContainer.box = { x: initX, y: initY, width, height };
-      layoutContainer.left = { node: node.left };
-      doLayout(
-        initX,
-        initY + rowGap,
-        width / 2,
-        height,
-        rowGap,
-        layoutContainer.left,
-        path.concat(["left"])
-      );
-      layoutContainer.right = { node: node.right };
-      doLayout(
-        initX + width / 2,
-        initY + rowGap,
-        width / 2,
-        height,
-        rowGap,
-        layoutContainer.right,
-        path.concat(["right"])
-      );
+      option.layoutContainer.box = {
+        x: option.initX,
+        y: option.initY,
+        width: option.width,
+        height: option.height,
+      };
+      option.layoutContainer.left = { node: node.left };
+      doLayout({
+        ...option,
+        initY: option.initY + option.height,
+        width: option.width / 2,
+        layoutContainer: option.layoutContainer.left,
+        path: option.path.concat(["left"]),
+      });
+      option.layoutContainer.right = { node: node.right };
+      doLayout({
+        ...option,
+        initX: option.initX + option.width / 2,
+        width: option.width / 2,
+        layoutContainer: option.layoutContainer.right,
+        path: option.path.concat(["right"]),
+      });
     }
   }
 };
 
 const createLayoutContainer = (
-  node: TreeNode<any, any>,
-  initX: number,
-  initY: number,
-  width: number,
-  height: number,
-  rowGap: number
+  option: LayoutContainerCreateOptions
 ): LayoutContainer => {
-  const container: LayoutContainer = { node };
-  doLayout(initX, initY, width, height, rowGap, container, []);
+  const container: LayoutContainer = { node: option.node };
+  doLayout({ ...option, path: [], layoutContainer: container });
   return container;
 };
 
@@ -260,19 +250,31 @@ export const paint = (
   node: TreeNode<any, any>,
   width: number,
   height: number,
-  rowGap: number,
   fontSizePx: number
 ): void => {
-  const layoutContainer = createLayoutContainer(
-    node,
-    0,
-    0,
-    width,
-    height,
-    rowGap
-  );
+  const layoutContainer = createLayoutContainer({
+    node: node,
+    initX: 0,
+    initY: 0,
+    width: width,
+    height: height,
+    fontSizePx: fontSizePx,
+  });
 
   const flatLayout = createFlatLayout(layoutContainer);
+
+  const maxHeight = Math.max(
+    flatLayout.vertices
+      .filter((vertex) => !!vertex?.box)
+      .map((vertex) => {
+        const v = asNonNullable(vertex);
+        const box = asNonNullable(v.box);
+        return box.y + box.height;
+      })
+      .reduce((a, b) => (a >= b ? a : b), 0 - Infinity),
+    0
+  );
+  svgElement.setAttribute("height", maxHeight.toString());
 
   const graph = createGraph(flatLayout);
 
@@ -307,7 +309,8 @@ export const paint = (
           circleEle.setAttribute("cx", tb.x.toString());
           circleEle.setAttribute("cy", tb.y.toString());
           circleEle.setAttribute("r", fontSizePx.toString());
-          circleEle.setAttribute("stroke", "none");
+          circleEle.setAttribute("stroke", "black");
+          circleEle.setAttribute("stroke-width", "1");
           circleEle.setAttribute("fill", "#ffffff");
           return circleEle;
         })
