@@ -5,21 +5,19 @@ import { editor } from "monaco-editor";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Editor } from "./components/editor";
+import ts from "typescript";
+
+const loadScript = (fileContent: string) => {
+  const fileName = "editorContent.js";
+  const fileObject = new File([fileContent], fileName, {
+    type: "text/javascript",
+  });
+  const moduleUrl = URL.createObjectURL(fileObject);
+  // see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
+  return import(/* webpackIgnore: true */ moduleUrl);
+};
 
 export const Home = () => {
-  useEffect(() => {
-    const fileContent = "export default 1234;";
-    const fileName = "myScript.js";
-    const fileObject = new File([fileContent], fileName, {
-      type: "text/javascript",
-    });
-    const myScriptUrl = URL.createObjectURL(fileObject);
-    // see https://webpack.js.org/api/module-methods/#dynamic-expressions-in-import
-    import(/* webpackIgnore: true */ myScriptUrl).then((res) => {
-      console.log("Script loaded:", res.default);
-    });
-  }, []);
-
   const templateFilename = "template.ts";
   const { data: templateData } = useQuery([], () =>
     axios.get(templateFilename).then((res) => res.data)
@@ -36,7 +34,16 @@ export const Home = () => {
           initialValue={templateData ?? ""}
           onChange={() => {
             const value = editorRef.current?.getValue() ?? "";
-            console.log({ value });
+            if (value) {
+              const transpiledCode = ts.transpileModule(value, {
+                compilerOptions: { target: ts.ScriptTarget.ESNext },
+              });
+              if (transpiledCode && transpiledCode.outputText) {
+                loadScript(transpiledCode.outputText).then((res) => {
+                  console.log({ value: res.default });
+                });
+              }
+            }
           }}
         />
       </Box>

@@ -9,6 +9,20 @@ export type TreeNode<KeyT, ValueT> =
   | null
   | undefined;
 
-const root: TreeNode<string, string> = null;
+const root: TreeNode<string, string> = {
+  isRed: false,
+  key: "c",
+  value: "",
+  left: {
+    isRed: true,
+    key: "b",
+    value: "",
+  },
+  right: {
+    isRed: false,
+    key: "d",
+    value: "",
+  },
+};
 
 export default root;
