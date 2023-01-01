@@ -26,7 +26,7 @@ export const HelpEntry = () => {
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <DialogTitle>Help & FAQ</DialogTitle>
         <DialogContent>
-          <Typography gutterBottom variant="h5">
+          <Typography gutterBottom variant="h6">
             What is this?
           </Typography>
           <Typography gutterBottom>
@@ -35,7 +35,7 @@ export const HelpEntry = () => {
             human-friendly manner.
           </Typography>
 
-          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h5">
+          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h6">
             How can I use this?
           </Typography>
           <Typography gutterBottom>
@@ -44,7 +44,16 @@ export const HelpEntry = () => {
             you with checking your understanding of the data structure.
           </Typography>
 
-          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h5">
+          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h6">
+            What are the prerequisites?
+          </Typography>
+          <Typography>
+            In order to start, you need to have some basic understandings of
+            programming, algorithms and data structures, and it will be nice to
+            have some TypeScript skills.
+          </Typography>
+
+          <Typography sx={{ marginTop: 2 }} gutterBottom variant="h6">
             Is this Open-Source?
           </Typography>
           <Typography gutterBottom>
