@@ -3,10 +3,12 @@ import { editor } from "monaco-editor";
 import { Box } from "@mui/material";
 
 export const Editor = (props: {
+  indentSize?: number;
   editorRef?: MutableRefObject<editor.IStandaloneCodeEditor | undefined>;
   initialValue?: string;
   onChange?: () => void;
 }) => {
+  const indentSize = props.indentSize ?? 2;
   const editorEleRef = useRef<HTMLDivElement>();
   const editorInstanceRef = useRef<editor.IStandaloneCodeEditor>();
   useEffect(() => {
@@ -15,6 +17,7 @@ export const Editor = (props: {
         const instance = editor.create(editorEleRef.current, {
           value: props.initialValue || "",
           language: "typescript",
+          tabSize: indentSize,
         });
 
         editorInstanceRef.current = instance;

@@ -20,17 +20,26 @@ export const Home = () => {
     });
   }, []);
 
-  // const templateFilename = "template.ts";
-  // const { data: templateData } = useQuery([], () =>
-  //   axios.get(templateFilename).then((res) => res.data)
-  // );
+  const templateFilename = "template.ts";
+  const { data: templateData } = useQuery([], () =>
+    axios.get(templateFilename).then((res) => res.data)
+  );
 
-  // const editorRef = useRef<editor.IStandaloneCodeEditor>();
+  const editorRef = useRef<editor.IStandaloneCodeEditor>();
 
   return (
     <Box sx={{ height: "100vh", boxSizing: "border-box", display: "flex" }}>
       <Box sx={{ flex: 1 }}></Box>
-      <Box sx={{ flex: 1 }}></Box>
+      <Box sx={{ flex: 1 }}>
+        <Editor
+          editorRef={editorRef}
+          initialValue={templateData ?? ""}
+          onChange={() => {
+            const value = editorRef.current?.getValue() ?? "";
+            console.log({ value });
+          }}
+        />
+      </Box>
     </Box>
   );
 };
