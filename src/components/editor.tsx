@@ -12,34 +12,40 @@ export const Editor = (props: {
   onLoaded?: () => void;
   onExecute?: () => void;
   isLoading?: boolean;
+  revealLine?: number;
 }) => {
   const indentSize = props.indentSize ?? 2;
   const editorEleRef = useRef<HTMLDivElement>();
   const editorInstanceRef = useRef<editor.IStandaloneCodeEditor>();
   useEffect(() => {
-    if (!editorInstanceRef.current) {
-      if (editorEleRef.current) {
-        const instance = editor.create(editorEleRef.current, {
-          value: props.initialValue || "",
-          language: "typescript",
-          tabSize: indentSize,
-          automaticLayout: true,
-        });
+    let instance: editor.IStandaloneCodeEditor | undefined;
 
-        editorInstanceRef.current = instance;
-        if (props.editorRef) {
-          props.editorRef.current = instance;
-        }
+    if (editorEleRef.current) {
+      instance = editor.create(editorEleRef.current, {
+        value: props.initialValue || "",
+        language: "typescript",
+        tabSize: indentSize,
+        automaticLayout: true,
+      });
 
-        instance.getModel()?.onDidChangeContent(() => props.onChange?.());
-        props.onLoaded?.();
+      editorInstanceRef.current = instance;
+      if (props.editorRef) {
+        props.editorRef.current = instance;
       }
-    }
-  });
 
-  useEffect(() => {
-    editorInstanceRef.current?.setValue(props.initialValue || "");
-  }, [props.initialValue]);
+      instance.getModel()?.onDidChangeContent(() => props.onChange?.());
+
+      if (props.revealLine !== undefined) {
+        instance.revealLineInCenter(props.revealLine);
+      }
+
+      props.onLoaded?.();
+    }
+
+    return () => {
+      instance?.dispose();
+    };
+  }, [props.indentSize, props.initialValue, props.revealLine]);
 
   return (
     <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
