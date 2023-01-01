@@ -9,6 +9,7 @@ import { Tree } from "./components/Tree";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { downloadFile, getEscapedTimestamp } from "./utils/downloadFile";
+import { Resizable } from "re-resizable";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -43,7 +44,20 @@ export const Home = () => {
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <Tree root={root} svgId={svgId} />
       </Box>
-      <Box sx={{ width: `${window.innerWidth * 0.4}px` }}>
+      <Resizable
+        minWidth={540}
+        enable={{
+          top: false,
+          right: false,
+          bottom: false,
+          left: true,
+          topRight: false,
+          bottomRight: false,
+          bottomLeft: false,
+          topLeft: false,
+        }}
+        defaultSize={{ width: window.innerWidth * 0.4, height: "100%" }}
+      >
         <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
           <Editor
             revealLine={revealLine}
@@ -95,7 +109,7 @@ export const Home = () => {
             </Stack>
           </Box>
         </Box>
-      </Box>
+      </Resizable>
     </Box>
   );
 };
