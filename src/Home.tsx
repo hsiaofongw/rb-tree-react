@@ -1,11 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import "./App.css";
-import { Box } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import { editor } from "monaco-editor";
 import { Editor } from "./components/Editor";
 import { useTreeNode } from "./hooks/useTreeNode";
 import { useTsTemplateContent } from "./hooks/useTsTemplateContent";
 import { Tree } from "./components/Tree";
+import LoadingButton from "@mui/lab/LoadingButton";
+import SaveIcon from "@mui/icons-material/Save";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -40,16 +42,29 @@ export const Home = () => {
         <Tree root={root} />
       </Box>
       <Box sx={{ width: `${window.innerWidth * 0.4}px` }}>
-        <Editor
-          revealLine={revealLine}
-          isLoading={isLoading}
-          editorRef={editorRef}
-          initialValue={templateData ?? ""}
-          onExecute={() => {
-            const value = editorRef.current?.getValue() ?? "";
-            setTsContent(value);
-          }}
-        />
+        <Box sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+          <Editor
+            revealLine={revealLine}
+            editorRef={editorRef}
+            initialValue={templateData ?? ""}
+          />
+          <Box sx={{ height: "100px" }}>
+            <Stack sx={{ padding: "20px" }} direction={"row"} spacing={2}>
+              <LoadingButton
+                loading={isLoading}
+                loadingPosition="start"
+                startIcon={<SaveIcon />}
+                variant="contained"
+                onClick={() => {
+                  const value = editorRef.current?.getValue() ?? "";
+                  setTsContent(value);
+                }}
+              >
+                Execute
+              </LoadingButton>
+            </Stack>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );
