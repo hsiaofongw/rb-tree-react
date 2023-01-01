@@ -18,5 +18,5 @@ export const Tree = (props: { root: TreeNode<string, string> }) => {
       svgSelection.remove();
     };
   });
-  return <Box ref={divRef} sx={{ height: "100%" }}></Box>;
+  return <Box ref={divRef} sx={{ height: "100%", overflow: "auto" }}></Box>;
 };

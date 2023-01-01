@@ -255,16 +255,44 @@ export const paint = (
   height: number,
   fontSizePx: number
 ): void => {
-  const layoutContainer = createLayoutContainer({
-    node: node,
-    initX: 0,
-    initY: 0,
-    width: width,
-    height: height,
-    fontSizePx: fontSizePx,
-  });
+  let layoutContainer: LayoutContainer;
+  let flatLayout: FlatLayout;
+  let graph: Graph;
 
-  const flatLayout = createFlatLayout(layoutContainer);
+  while (true) {
+    layoutContainer = createLayoutContainer({
+      node: node,
+      initX: 0,
+      initY: 0,
+      width: width,
+      height: height,
+      fontSizePx: fontSizePx,
+    });
+    flatLayout = createFlatLayout(layoutContainer);
+
+    graph = createGraph(flatLayout);
+
+    let boxX = graph.textBoxes.map((tb) => tb.x);
+    boxX.sort((a, b) => a - b);
+    if (boxX.length < 2) {
+      break;
+    }
+
+    let boxGaps: number[] = [];
+    for (let i = 0; i < boxX.length - 1; ++i) {
+      boxGaps.push(boxX[i + 1] - boxX[i]);
+    }
+    const minBoxGap = Math.min(...boxGaps);
+
+    console.log("boxX", boxX);
+    console.log("boxGap", boxGaps);
+    console.log("minBoxGap", minBoxGap);
+
+    const requiredMinBoxWidth = fontSizePx * 2;
+    console.log("Required:", requiredMinBoxWidth);
+
+    break;
+  }
 
   const maxHeight = Math.max(
     flatLayout.vertices
@@ -279,8 +307,6 @@ export const paint = (
   );
   svgElement.setAttribute("height", maxHeight.toString());
   svgElement.setAttribute("width", width.toString());
-
-  const graph = createGraph(flatLayout);
 
   const arrowClassName = "arrow";
   const arrowSelector = `.${arrowClassName}`;

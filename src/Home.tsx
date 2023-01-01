@@ -36,7 +36,7 @@ export const Home = () => {
 
   return (
     <Box sx={{ height: "100vh", boxSizing: "border-box", display: "flex" }}>
-      <Box sx={{ flex: 1 }}>
+      <Box sx={{ flex: 1, overflow: "hidden" }}>
         <Tree root={root} />
       </Box>
       <Box sx={{ width: `${window.innerWidth * 0.4}px` }}>
