@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef } from "react";
 import "./App.css";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Tooltip } from "@mui/material";
 import { editor } from "monaco-editor";
 import { Editor } from "./components/Editor";
 import { useTreeNode } from "./hooks/useTreeNode";
@@ -10,6 +10,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { downloadFile, getEscapedTimestamp } from "./utils/downloadFile";
 import { Resizable } from "re-resizable";
+import IconButton from "@mui/material/IconButton";
+import HelpOutlineOutlinedIcon from "@mui/icons-material/HelpOutlineOutlined";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -106,6 +108,12 @@ export const Home = () => {
               >
                 Export Code
               </Button>
+
+              <Tooltip placement="top" title={"Click for help"}>
+                <IconButton>
+                  <HelpOutlineOutlinedIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
           </Box>
         </Box>
