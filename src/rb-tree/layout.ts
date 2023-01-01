@@ -284,12 +284,12 @@ export const paint = (
     }
     const minBoxGap = Math.min(...boxGaps);
 
-    console.log("boxX", boxX);
-    console.log("boxGap", boxGaps);
-    console.log("minBoxGap", minBoxGap);
+    const requiredMinGap = fontSizePx * 2;
 
-    const requiredMinBoxWidth = fontSizePx * 2;
-    console.log("Required:", requiredMinBoxWidth);
+    if (minBoxGap < requiredMinGap) {
+      width += 500;
+      continue;
+    }
 
     break;
   }
