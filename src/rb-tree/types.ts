@@ -4,7 +4,7 @@ export type TreeNode<KeyT, ValueT> =
       left?: TreeNode<KeyT, ValueT>;
       right?: TreeNode<KeyT, ValueT>;
       key: KeyT;
-      value: ValueT;
+      value?: ValueT;
     }
   | null
   | undefined;
