@@ -8,6 +8,7 @@ import { useTsTemplateContent } from "./hooks/useTsTemplateContent";
 import { Tree } from "./components/Tree";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
+import { downloadFile, getEscapedTimestamp } from "./utils/downloadFile";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -71,21 +72,25 @@ export const Home = () => {
                     const serializer = new XMLSerializer();
                     const svgContent = serializer.serializeToString(svgEle);
                     if (svgContent) {
-                      const anchorEle = window.document.createElement("a");
-                      const timestamp = new Date()
-                        .toLocaleString()
-                        .replace(" ", "-");
+                      const timestamp = getEscapedTimestamp();
                       const svgFileName = `svg-${timestamp}.svg`;
-                      const svgFileObject = new File([svgContent], svgFileName);
-                      const svgFileUrl = URL.createObjectURL(svgFileObject);
-                      anchorEle.href = svgFileUrl;
-                      anchorEle.download = svgFileName;
-                      anchorEle.click();
+                      downloadFile(svgContent, svgFileName);
                     }
                   }
                 }}
               >
                 Export SVG
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  const codeContent = editorRef.current?.getValue() ?? "";
+                  const timestamp = getEscapedTimestamp();
+                  const codeFileName = `red-black-tree-code-${timestamp}.ts`;
+                  downloadFile(codeContent, codeFileName);
+                }}
+              >
+                Export Code
               </Button>
             </Stack>
           </Box>
