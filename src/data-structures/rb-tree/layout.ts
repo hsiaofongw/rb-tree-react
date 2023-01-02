@@ -1,8 +1,8 @@
 import { TreeNode } from "./types";
 import { isRed } from "./utils";
 import { select } from "d3";
-import { svgNs } from "../resources/namespace-resources";
-import { asNonNullable } from "../utils/typeUtils";
+import { svgNs } from "../../resources/namespace-resources";
+import { asNonNullable } from "../../utils/typeUtils";
 
 type Box = {
   x: number;

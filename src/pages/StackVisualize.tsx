@@ -3,8 +3,8 @@ import { useJavaScriptDynamicModule } from "../hooks/useJavaScriptDynamicModule"
 import { useTextContent } from "../hooks/useTsTemplateContent";
 import { StructureVisualizeBySVG } from "../components/StructureVisualize";
 import { VisualizeFrameWork } from "../components/VisualizeFramework";
-import { Stack } from "../stack/types";
-import { paint } from "../stack/layout";
+import { Stack } from "../data-structures/stack/types";
+import { paint } from "../data-structures/stack/layout";
 
 export const StackVisualize = () => {
   const {

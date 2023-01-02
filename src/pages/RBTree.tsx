@@ -2,9 +2,9 @@ import { useEffect } from "react";
 import { useJavaScriptDynamicModule } from "../hooks/useJavaScriptDynamicModule";
 import { useTextContent } from "../hooks/useTsTemplateContent";
 import { StructureVisualizeBySVG } from "../components/StructureVisualize";
-import { paint } from "../rb-tree/layout";
+import { paint } from "../data-structures/rb-tree/layout";
 import { VisualizeFrameWork } from "../components/VisualizeFramework";
-import { TreeNode } from "../rb-tree/types";
+import { TreeNode } from "../data-structures/rb-tree/types";
 
 export const RBTree = () => {
   const {
