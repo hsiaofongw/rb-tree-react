@@ -206,6 +206,22 @@ export const paint = (
           .classed(cellClassName, true)
       );
 
+    if (stack.size > 0) {
+      const topPtrX1 = basePtrStartX;
+      const topPtrY1 = basePtrStartY + stack.size * stackItemHeight;
+      const topPtrX2 = topPtrX1 + basePtrLength;
+      const topPtrY2 = topPtrY1;
+      const topPtrEle = createLabelPointerElement(
+        "$rsp",
+        topPtrX1,
+        topPtrY1,
+        topPtrX2,
+        topPtrY2,
+        "start"
+      );
+      svgElement.appendChild(topPtrEle);
+    }
+
     svgElement.appendChild(basePtrTextEle);
     svgElement.appendChild(stackBaseLineEle);
   }
