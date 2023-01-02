@@ -57,11 +57,11 @@ const getStackTop = <T>(stack: Stack<T>): T | undefined => {
 // ========
 
 let stack = makeStack<string>();
-stack = pushStack(stack, "a");
-stack = pushStack(stack, "b");
-stack = pushStack(stack, "c");
-stack = pushStack(stack, "d");
-stack = pushStack(stack, "e");
+stack = pushStack(stack, "foo");
+stack = pushStack(stack, "bar");
+stack = pushStack(stack, "hello, world");
+stack = pushStack(stack, "abc");
+stack = pushStack(stack, "defg");
 
 stack = popStack(stack);
 
