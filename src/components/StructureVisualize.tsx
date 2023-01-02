@@ -3,7 +3,7 @@ import { create } from "d3";
 import { MutableRefObject, useEffect, useRef } from "react";
 import { asNonNullable } from "../utils/typeUtils";
 
-export const StructureVisualize = (props: {
+export const StructureVisualizeBySVG = (props: {
   paint: (
     svgElement: SVGSVGElement,
     containerRef: MutableRefObject<HTMLDivElement | undefined>
