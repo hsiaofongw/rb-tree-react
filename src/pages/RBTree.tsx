@@ -53,7 +53,7 @@ export const RBTree = () => {
         <Tree root={root} svgId={svgId} />
       </Box>
       <Resizable
-        minWidth={520}
+        minWidth={420}
         enable={{
           top: false,
           right: false,
@@ -72,8 +72,19 @@ export const RBTree = () => {
             editorRef={editorRef}
             initialValue={templateData ?? ""}
           />
-          <Box sx={{ height: "100px", display: "flex", alignItems: "center" }}>
-            <Stack sx={{ paddingLeft: "20px" }} direction={"row"} spacing={2}>
+          <Box sx={{ height: "auto", display: "flex", alignItems: "center" }}>
+            <Box
+              sx={{
+                boxSizing: "content-box",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "row",
+                columnGap: 2,
+                rowGap: 2,
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+              }}
+            >
               <LoadingButton
                 loading={isLoading}
                 loadingPosition="start"
@@ -83,10 +94,12 @@ export const RBTree = () => {
                   const value = editorRef.current?.getValue() ?? "";
                   setTsContent(value);
                 }}
+                sx={{ flexShrink: 0 }}
               >
                 Execute
               </LoadingButton>
               <Button
+                sx={{ flexShrink: 0 }}
                 variant="outlined"
                 onClick={() => {
                   const svgEle = window.document.getElementById(svgId);
@@ -104,6 +117,7 @@ export const RBTree = () => {
                 Export SVG
               </Button>
               <Button
+                sx={{ flexShrink: 0 }}
                 variant="outlined"
                 onClick={() => {
                   const codeContent = editorRef.current?.getValue() ?? "";
@@ -116,7 +130,7 @@ export const RBTree = () => {
               </Button>
 
               <HelpEntry />
-            </Stack>
+            </Box>
           </Box>
         </Box>
       </Resizable>
