@@ -1,5 +1,9 @@
+import { select } from "d3";
 import { svgNs } from "../../resources/namespace-resources";
 import { Stack } from "./types";
+
+const defaultHorizontalGap = 6;
+const defaultStrokeWidth = 1;
 
 const getTextElementWidth = (
   textElement: SVGTextElement
@@ -30,6 +34,31 @@ const getTextElementWidth = (
 
 const pointsToString = (points: number[][]): string => {
   return points.map(([x, y]) => `${x},${y}`).join(" ");
+};
+
+const createLineElement = (
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number
+): SVGLineElement => {
+  const lineElement = window.document.createElementNS(svgNs, "line");
+  lineElement.setAttribute("x1", x1.toString());
+  lineElement.setAttribute("y1", y1.toString());
+  lineElement.setAttribute("x2", x2.toString());
+  lineElement.setAttribute("y2", y2.toString());
+  lineElement.setAttribute("stroke", "black");
+  lineElement.setAttribute("stroke-width", defaultStrokeWidth.toString());
+  return lineElement;
+};
+
+const createPolylineElement = (points: number[][]): SVGPolylineElement => {
+  const polyLineEle = window.document.createElementNS(svgNs, "polyline");
+  polyLineEle.setAttribute("points", pointsToString(points));
+  polyLineEle.setAttribute("fill", "none");
+  polyLineEle.setAttribute("stroke", "black");
+  polyLineEle.setAttribute("stroke-width", defaultStrokeWidth.toString());
+  return polyLineEle;
 };
 
 const createArrowElement = (
@@ -74,24 +103,13 @@ const createArrowElement = (
   svgEle.setAttribute("height", h.toString());
   svgEle.setAttribute("style", "overflow: visible;");
 
-  const polyLineEle = window.document.createElementNS(svgNs, "polyline");
-  polyLineEle.setAttribute(
-    "points",
-    pointsToString([
-      [x1, y1],
-      [x2, y2],
-    ])
-  );
-  polyLineEle.setAttribute("fill", "none");
-  polyLineEle.setAttribute("stroke", "black");
+  const polyLineEle = createLineElement(x1, y1, x2, y2);
   polyLineEle.setAttribute("marker-end", `url(#${arrowId})`);
 
   svgEle.appendChild(polyLineEle);
 
   return svgEle;
 };
-
-const defaultHorizontalGap = 6;
 
 const createLabelPointerElement = (
   textContent: string,
@@ -154,23 +172,39 @@ export const paint = (
 
     const stackItemWidth = 120;
     const stackItemHeight = 40;
-    const stackItemStrokeWidth = 1;
+    const stackItemStrokeWidth = defaultStrokeWidth;
     const stackBaseLineX1 = basePtrEndX + defaultHorizontalGap;
     const stackBaseLineY1 = basePtrEndY;
 
-    const stackBaseLineEle = window.document.createElementNS(svgNs, "line");
-    stackBaseLineEle.setAttribute("x1", stackBaseLineX1.toString());
-    stackBaseLineEle.setAttribute("y1", stackBaseLineY1.toString());
-    stackBaseLineEle.setAttribute(
-      "x2",
-      (stackBaseLineX1 + stackItemWidth - stackItemStrokeWidth).toString()
+    const stackBaseLineEle = createLineElement(
+      stackBaseLineX1,
+      stackBaseLineY1,
+      stackBaseLineX1 + stackItemWidth - stackItemStrokeWidth,
+      stackBaseLineY1
     );
-    stackBaseLineEle.setAttribute("y2", stackBaseLineY1.toString());
-    stackBaseLineEle.setAttribute("stroke", "black");
-    stackBaseLineEle.setAttribute(
-      "stroke-width",
-      stackItemStrokeWidth.toString()
-    );
+
+    const cellClassName = "cell";
+    const cellSelector = `.${cellClassName}`;
+    select(svgElement)
+      .selectAll(cellSelector)
+      .data(stack.storage)
+      .join((enter) =>
+        enter
+          .append(function (datum, idx) {
+            const gElement = window.document.createElementNS(svgNs, "g");
+            const x = stackBaseLineX1;
+            const y = stackBaseLineY1 + idx * stackItemHeight;
+            const polylineElement = createPolylineElement([
+              [x, y],
+              [x, y + stackItemHeight],
+              [x + stackItemWidth - stackItemStrokeWidth, y + stackItemHeight],
+              [x + stackItemWidth - stackItemStrokeWidth, y],
+            ]);
+            gElement.appendChild(polylineElement);
+            return gElement;
+          })
+          .classed(cellClassName, true)
+      );
 
     svgElement.appendChild(basePtrTextEle);
     svgElement.appendChild(stackBaseLineEle);
