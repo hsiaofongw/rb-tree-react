@@ -220,6 +220,10 @@ export const paint = (
         "start"
       );
       svgElement.appendChild(topPtrEle);
+      svgElement.setAttribute(
+        "height",
+        (topPtrY1 + stackItemHeight).toString()
+      );
     }
 
     svgElement.appendChild(basePtrTextEle);
