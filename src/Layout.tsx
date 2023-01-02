@@ -54,7 +54,16 @@ export const Layout = (props: { children: React.ReactNode }) => {
           </Toolbar>
         </AppBar>
       </Box>
-      <Box sx={{ flex: 1, overflow: "hidden" }}>{props.children}</Box>
+      <Box
+        sx={{
+          flex: 1,
+          overflow: "auto",
+          boxSizing: "border-box",
+          padding: 2,
+        }}
+      >
+        {props.children}
+      </Box>
     </Box>
   );
 };

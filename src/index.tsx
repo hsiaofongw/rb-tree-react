@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./Layout";
 import { Box } from "@mui/material";
+import { Home } from "./pages/Home";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +16,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Layout>
-        <Box>Home</Box>
+        <Home />
       </Layout>
     ),
   },
