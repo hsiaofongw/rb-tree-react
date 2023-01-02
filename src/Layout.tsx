@@ -6,6 +6,12 @@ import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { MenuEntry } from "./types";
 import HomeIcon from "@mui/icons-material/Home";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import {
+  linkOfGithubRepo,
+  nameOfGithubRepo,
+  ownerOfGithubRepo,
+} from "./resources/github-resources";
 
 const entryGroups: MenuEntry[][] = [
   [
@@ -25,6 +31,21 @@ const entryGroups: MenuEntry[][] = [
       text: "Stack",
       icon: <ViewStreamIcon />,
       to: "/stack",
+    },
+  ],
+  [
+    {
+      text: "Repo",
+      icon: <GitHubIcon />,
+      to: {
+        pathname: "/redirect-to-external-site",
+        search:
+          "?" +
+          new URLSearchParams({
+            url: linkOfGithubRepo(ownerOfGithubRepo, nameOfGithubRepo),
+          }).toString(),
+      },
+      target: "_blank",
     },
   ],
 ];

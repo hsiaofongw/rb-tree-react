@@ -2,11 +2,16 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import { Layout } from "./Layout";
 import { Box } from "@mui/material";
 import { Home } from "./pages/Home";
 import { RBTree } from "./pages/RBTree";
+import { RedirectToExternalSite } from "./components/RedirectToExternalSite";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -36,6 +41,10 @@ const router = createBrowserRouter([
         <Box>Stack</Box>
       </Layout>
     ),
+  },
+  {
+    path: "redirect-to-external-site",
+    element: <RedirectToExternalSite />,
   },
 ]);
 

@@ -37,6 +37,7 @@ export const DrawerEntry = (props: { entryGroups: MenuEntry[][] }) => {
                     to={entryItem.to}
                     onClick={() => setOpen(false)}
                     style={{ textDecoration: "none", color: "inherit" }}
+                    target={entryItem.target}
                   >
                     <ListItem key={entryItem.text} disablePadding>
                       <ListItemButton>
