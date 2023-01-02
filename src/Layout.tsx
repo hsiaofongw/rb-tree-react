@@ -48,9 +48,3 @@ export const Layout = (props: { children: React.ReactNode }) => {
     </Box>
   );
 };
-
-function App() {
-  return <></>;
-}
-
-export default App;

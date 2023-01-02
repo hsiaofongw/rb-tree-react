@@ -1,10 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
-import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Layout } from "./Layout";
+import { Box } from "@mui/material";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -13,7 +14,27 @@ const root = ReactDOM.createRoot(
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <></>,
+    element: (
+      <Layout>
+        <Box>Home</Box>
+      </Layout>
+    ),
+  },
+  {
+    path: "/rb-tree",
+    element: (
+      <Layout>
+        <Box>Red Black Tree</Box>
+      </Layout>
+    ),
+  },
+  {
+    path: "/stack",
+    element: (
+      <Layout>
+        <Box>Stack</Box>
+      </Layout>
+    ),
   },
 ]);
 
@@ -26,8 +47,3 @@ root.render(
     </QueryClientProvider>
   </React.StrictMode>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
