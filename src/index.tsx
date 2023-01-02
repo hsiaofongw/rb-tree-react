@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./Layout";
 import { Box } from "@mui/material";
 import { Home } from "./pages/Home";
+import { RBTree } from "./pages/RBTree";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -24,7 +25,7 @@ const router = createBrowserRouter([
     path: "/rb-tree",
     element: (
       <Layout>
-        <Box>Red Black Tree</Box>
+        <RBTree />
       </Layout>
     ),
   },

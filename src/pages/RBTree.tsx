@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef } from "react";
-import "./App.css";
-import { Box, Button, Stack } from "@mui/material";
+import { Box, Button, Paper, Stack } from "@mui/material";
 import { editor } from "monaco-editor";
 import { Editor } from "../components/Editor";
 import { useTreeNode } from "../hooks/useTreeNode";
@@ -28,7 +27,7 @@ export const useRevealLineIdx = (
   return { revealLine };
 };
 
-export const Home = () => {
+export const RBTree = () => {
   const editorRef = useRef<editor.IStandaloneCodeEditor>();
   const { root, setTsContent, isLoading } = useTreeNode();
   const { data: templateData } = useTsTemplateContent();
@@ -41,7 +40,15 @@ export const Home = () => {
   const svgId = useId();
 
   return (
-    <Box sx={{ height: "100vh", boxSizing: "border-box", display: "flex" }}>
+    <Paper
+      sx={{
+        minHeight: "100%",
+        height: "100%",
+        padding: "10px",
+        boxSizing: "border-box",
+        display: "flex",
+      }}
+    >
       <Box sx={{ flex: 1, overflow: "hidden" }}>
         <Tree root={root} svgId={svgId} />
       </Box>
@@ -113,6 +120,6 @@ export const Home = () => {
           </Box>
         </Box>
       </Resizable>
-    </Box>
+    </Paper>
   );
 };
