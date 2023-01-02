@@ -5,8 +5,8 @@ import { Stack } from "./types";
 const defaultHorizontalGap = 6;
 const defaultStrokeWidth = 1;
 
-const getTextElementWidth = (
-  textElement: SVGTextElement
+const getSvgElementWidth = (
+  svgElement: SVGGElement | SVGTextElement
 ): { width: number; height: number } | undefined => {
   const measureSvgEle = window.document.createElementNS(svgNs, "svg");
   const measureSvgEleWidth = 100;
@@ -19,9 +19,9 @@ const getTextElementWidth = (
   measureSvgEle.setAttribute("height", measureSvgEleHeight.toString());
   window.document.body.appendChild(measureSvgEle);
 
-  measureSvgEle.appendChild(textElement);
+  measureSvgEle.appendChild(svgElement);
 
-  const bbox = textElement.getBBox();
+  const bbox = svgElement.getBBox();
 
   if (bbox) {
     const box = { width: bbox.width, height: bbox.height };
@@ -130,7 +130,7 @@ const createLabelPointerElement = (
     textElement.setAttribute("x", x2.toString());
     textElement.setAttribute("y", y2.toString());
     textElement.setAttribute("text-anchor", "start");
-    textElement.setAttribute("dx", `-${defaultHorizontalGap}`);
+    textElement.setAttribute("dx", `${defaultHorizontalGap}`);
   }
   textElement.textContent = textContent;
 
@@ -158,7 +158,7 @@ export const paint = (
     const basePtrText = basePtrTexts.join(", ");
     const basePtrStartX = 90;
     const basePtrStartY = 20;
-    const basePtrLength = 70;
+    const basePtrLength = 40;
     const basePtrEndX = basePtrStartX + basePtrLength;
     const basePtrEndY = basePtrStartY;
     const basePtrTextEle = createLabelPointerElement(
@@ -200,7 +200,20 @@ export const paint = (
               [x + stackItemWidth - stackItemStrokeWidth, y + stackItemHeight],
               [x + stackItemWidth - stackItemStrokeWidth, y],
             ]);
+            const ptrX =
+              x + stackItemWidth - stackItemStrokeWidth + defaultHorizontalGap;
+            const ptrY = y + stackItemHeight / 2;
+            const ptrElement = createLabelPointerElement(
+              String(datum),
+              ptrX,
+              ptrY,
+              ptrX + basePtrLength,
+              ptrY,
+              "end"
+            );
+
             gElement.appendChild(polylineElement);
+            gElement.appendChild(ptrElement);
             return gElement;
           })
           .classed(cellClassName, true)
@@ -226,6 +239,7 @@ export const paint = (
       );
     }
 
+    svgElement.setAttribute("width", width.toString());
     svgElement.appendChild(basePtrTextEle);
     svgElement.appendChild(stackBaseLineEle);
   }
