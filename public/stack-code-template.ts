@@ -28,35 +28,42 @@ const pushStack = <T>(stack: Stack<T>, item: NonNullable<T>): Stack<T> => {
   return stack;
 };
 
-const popStack = <T>(stack: Stack<T>): [Stack<T>, T | undefined] => {
+const popStack = <T>(stack: Stack<T>): Stack<T> => {
   if (stack) {
     if (stack.size) {
-      return [
-        {
-          storage: stack.storage.filter((_, idx) => idx !== stack.index),
-          index: stack.index - 1,
-          size: stack.size - 1,
-        },
-        stack.storage[stack.index],
-      ] as [Stack<T>, T | undefined];
+      return {
+        storage: stack.storage.filter((_, idx) => idx !== stack.index),
+        index: stack.index - 1,
+        size: stack.size - 1,
+      };
     }
   }
-  return [stack, undefined];
+
+  return stack;
 };
+
+const getStackTop = <T>(stack: Stack<T>): T | undefined => {
+  if (stack) {
+    if (stack.size) {
+      return stack.storage[stack.index];
+    }
+  }
+};
+
 // ========
 // End basic utils
 
 // Start user codes
 // ========
 
-let rsp0 = makeStack<string>();
-let rsp1 = pushStack(rsp0, "a");
-let rsp2 = pushStack(rsp1, "b");
-let rsp3 = pushStack(rsp2, "c");
+let stack = makeStack<string>();
+stack = pushStack(stack, "a");
+stack = pushStack(stack, "b");
+stack = pushStack(stack, "c");
+stack = pushStack(stack, "d");
+stack = pushStack(stack, "e");
 
-let [rsp4, _] = popStack(rsp3);
-
-let stack = rsp4;
+stack = popStack(stack);
 
 // ========
 // End user codes
