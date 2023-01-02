@@ -5,16 +5,26 @@ import { DrawerEntry } from "./components/DrawerEntry";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 import { MenuEntry } from "./types";
+import HomeIcon from "@mui/icons-material/Home";
 
 const entryGroups: MenuEntry[][] = [
   [
     {
+      text: "Home",
+      icon: <HomeIcon />,
+      to: "/",
+    },
+  ],
+  [
+    {
       text: "Red Black Tree",
       icon: <AccountTreeIcon />,
+      to: "/rb-tree",
     },
     {
       text: "Stack",
       icon: <ViewStreamIcon />,
+      to: "/stack",
     },
   ],
 ];

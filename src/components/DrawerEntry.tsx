@@ -12,6 +12,7 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import React, { useState } from "react";
 import { MenuEntry } from "../types";
+import { Link } from "react-router-dom";
 
 export const DrawerEntry = (props: { entryGroups: MenuEntry[][] }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -31,12 +32,19 @@ export const DrawerEntry = (props: { entryGroups: MenuEntry[][] }) => {
             <React.Fragment key={groupIdx}>
               <List>
                 {group.map((entryItem) => (
-                  <ListItem key={entryItem.text} disablePadding>
-                    <ListItemButton>
-                      <ListItemIcon>{entryItem.icon}</ListItemIcon>
-                      <ListItemText primary={entryItem.text} />
-                    </ListItemButton>
-                  </ListItem>
+                  <Link
+                    key={entryItem.text}
+                    to={entryItem.to}
+                    onClick={() => setOpen(false)}
+                    style={{ textDecoration: "none", color: "inherit" }}
+                  >
+                    <ListItem key={entryItem.text} disablePadding>
+                      <ListItemButton>
+                        <ListItemIcon>{entryItem.icon}</ListItemIcon>
+                        <ListItemText primary={entryItem.text} />
+                      </ListItemButton>
+                    </ListItem>
+                  </Link>
                 ))}
               </List>
               {groupIdx < groups.length - 1 && <Divider />}
