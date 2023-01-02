@@ -7,7 +7,6 @@ import { Layout } from "./components/Layout";
 import { Home } from "./pages/Home";
 import { RBTree } from "./pages/RBTree";
 import { RedirectToExternalSite } from "./components/RedirectToExternalSite";
-import { Box } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 
@@ -20,11 +19,13 @@ import {
 } from "./resources/github-resources";
 import { MenuEntry } from "./types";
 import { MenuEntryContext } from "./providers/MenuEntryProvider";
+import { StackVisualize } from "./pages/StackVisualize";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 
+/** router defines what content to render in the screen for each browser location. */
 const router = createBrowserRouter([
   {
     path: "/",
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     path: "/stack",
     element: (
       <Layout>
-        <Box>Stack</Box>
+        <StackVisualize />
       </Layout>
     ),
   },
@@ -56,6 +57,7 @@ const router = createBrowserRouter([
   },
 ]);
 
+/** entryGroups defines how does the location change when user clicks a menu entry. */
 const entryGroups: MenuEntry[][] = [
   [
     {
