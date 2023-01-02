@@ -91,6 +91,8 @@ const createArrowElement = (
   return svgEle;
 };
 
+const defaultHorizontalGap = 6;
+
 const createLabelPointerElement = (
   textContent: string,
   x1: number,
@@ -105,13 +107,14 @@ const createLabelPointerElement = (
     textElement.setAttribute("x", x1.toString());
     textElement.setAttribute("y", y1.toString());
     textElement.setAttribute("text-anchor", "end");
+    textElement.setAttribute("dx", `-${defaultHorizontalGap}`);
   } else if (placement === "end") {
     textElement.setAttribute("x", x2.toString());
     textElement.setAttribute("y", y2.toString());
     textElement.setAttribute("text-anchor", "start");
+    textElement.setAttribute("dx", `-${defaultHorizontalGap}`);
   }
   textElement.textContent = textContent;
-  textElement.setAttribute("dx", "-4");
 
   const arrowElement = createArrowElement(x1, y1, x2, y2);
 
@@ -137,16 +140,39 @@ export const paint = (
     const basePtrText = basePtrTexts.join(", ");
     const basePtrStartX = 90;
     const basePtrStartY = 20;
-    const basePtrLength = 90;
+    const basePtrLength = 70;
+    const basePtrEndX = basePtrStartX + basePtrLength;
+    const basePtrEndY = basePtrStartY;
     const basePtrTextEle = createLabelPointerElement(
       basePtrText,
       basePtrStartX,
       basePtrStartY,
-      basePtrStartX + basePtrLength,
-      basePtrStartY,
+      basePtrEndX,
+      basePtrEndY,
       "start"
     );
 
+    const stackItemWidth = 120;
+    const stackItemHeight = 40;
+    const stackItemStrokeWidth = 1;
+    const stackBaseLineX1 = basePtrEndX + defaultHorizontalGap;
+    const stackBaseLineY1 = basePtrEndY;
+
+    const stackBaseLineEle = window.document.createElementNS(svgNs, "line");
+    stackBaseLineEle.setAttribute("x1", stackBaseLineX1.toString());
+    stackBaseLineEle.setAttribute("y1", stackBaseLineY1.toString());
+    stackBaseLineEle.setAttribute(
+      "x2",
+      (stackBaseLineX1 + stackItemWidth - stackItemStrokeWidth).toString()
+    );
+    stackBaseLineEle.setAttribute("y2", stackBaseLineY1.toString());
+    stackBaseLineEle.setAttribute("stroke", "black");
+    stackBaseLineEle.setAttribute(
+      "stroke-width",
+      stackItemStrokeWidth.toString()
+    );
+
     svgElement.appendChild(basePtrTextEle);
+    svgElement.appendChild(stackBaseLineEle);
   }
 };
