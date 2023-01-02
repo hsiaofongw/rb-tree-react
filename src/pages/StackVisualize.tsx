@@ -4,10 +4,11 @@ import { useTextContent } from "../hooks/useTsTemplateContent";
 import { StructureVisualizeBySVG } from "../components/StructureVisualize";
 import { VisualizeFrameWork } from "../components/VisualizeFramework";
 import { Stack } from "../stack/types";
+import { paint } from "../stack/layout";
 
 export const StackVisualize = () => {
   const {
-    defaultExport: root,
+    defaultExport: stack,
     setTypeScriptCode: setTsContent,
     isLoading,
   } = useJavaScriptDynamicModule<Stack<string>>();
@@ -26,7 +27,15 @@ export const StackVisualize = () => {
       visualization={
         <StructureVisualizeBySVG
           paint={(svgElement, divRef) => {
-            // paint(svgElement, root, divRef.current?.clientWidth ?? 100, 80, 16);
+            const boxHeight = 30;
+            const fontSizePx = 16;
+            paint(
+              svgElement,
+              stack,
+              divRef.current?.clientWidth || 100,
+              boxHeight,
+              fontSizePx
+            );
           }}
         />
       }
