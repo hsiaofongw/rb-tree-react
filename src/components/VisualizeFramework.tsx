@@ -79,24 +79,7 @@ export const VisualizeFrameWork = (props: {
               >
                 Execute
               </LoadingButton>
-              <Button
-                sx={{ flexShrink: 0 }}
-                variant="outlined"
-                onClick={() => {
-                  const svgEle = window.document.getElementById(svgId);
-                  if (svgEle) {
-                    const serializer = new XMLSerializer();
-                    const svgContent = serializer.serializeToString(svgEle);
-                    if (svgContent) {
-                      const timestamp = getEscapedTimestamp();
-                      const svgFileName = `svg-${timestamp}.svg`;
-                      downloadFile(svgContent, svgFileName);
-                    }
-                  }
-                }}
-              >
-                Export SVG
-              </Button>
+
               <Button
                 sx={{ flexShrink: 0 }}
                 variant="outlined"
