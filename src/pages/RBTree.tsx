@@ -53,7 +53,7 @@ export const RBTree = () => {
         <Tree root={root} svgId={svgId} />
       </Box>
       <Resizable
-        minWidth={540}
+        minWidth={520}
         enable={{
           top: false,
           right: false,
@@ -72,8 +72,8 @@ export const RBTree = () => {
             editorRef={editorRef}
             initialValue={templateData ?? ""}
           />
-          <Box sx={{ height: "100px" }}>
-            <Stack sx={{ padding: "20px" }} direction={"row"} spacing={2}>
+          <Box sx={{ height: "100px", display: "flex", alignItems: "center" }}>
+            <Stack sx={{ paddingLeft: "20px" }} direction={"row"} spacing={2}>
               <LoadingButton
                 loading={isLoading}
                 loadingPosition="start"
