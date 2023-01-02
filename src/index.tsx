@@ -2,18 +2,12 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
-import {
-  createBrowserRouter,
-  Navigate,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Layout } from "./Layout";
 import { Home } from "./pages/Home";
 import { RBTree } from "./pages/RBTree";
 import { RedirectToExternalSite } from "./components/RedirectToExternalSite";
-import { AppBar, Box, Toolbar, Typography } from "@mui/material";
-import { nameOfProduct } from "./resources/theme-resources";
-import { DrawerEntry } from "./components/DrawerEntry";
+import { Box } from "@mui/material";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
 
