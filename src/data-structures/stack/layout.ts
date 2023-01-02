@@ -84,7 +84,6 @@ const createArrowElement = (
   );
   polyLineEle.setAttribute("fill", "none");
   polyLineEle.setAttribute("stroke", "black");
-  polyLineEle.setAttribute("marker-start", `url(#${arrowId})`);
   polyLineEle.setAttribute("marker-end", `url(#${arrowId})`);
 
   svgEle.appendChild(polyLineEle);
@@ -94,43 +93,33 @@ const createArrowElement = (
 
 const createLabelPointerElement = (
   textContent: string,
-  width: number
-): SVGSVGElement => {
-  const svgElement = window.document.createElementNS(svgNs, "svg");
-  svgElement.setAttribute("width", width.toString());
-
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  placement: "start" | "end"
+): SVGGElement => {
   const textElement = window.document.createElementNS(svgNs, "text");
-  textElement.setAttribute("x", "0");
-  textElement.setAttribute("y", "50%");
   textElement.setAttribute("alignment-baseline", "middle");
+  if (placement === "start") {
+    textElement.setAttribute("x", x1.toString());
+    textElement.setAttribute("y", y1.toString());
+    textElement.setAttribute("text-anchor", "end");
+  } else if (placement === "end") {
+    textElement.setAttribute("x", x2.toString());
+    textElement.setAttribute("y", y2.toString());
+    textElement.setAttribute("text-anchor", "start");
+  }
   textElement.textContent = textContent;
+  textElement.setAttribute("dx", "-4");
 
-  const bbox = getTextElementWidth(textElement);
-  const textWidth = bbox?.width ?? 0;
-  const textHeight = bbox?.height ?? 0;
+  const arrowElement = createArrowElement(x1, y1, x2, y2);
 
-  const rectElement = window.document.createElementNS(svgNs, "rect");
-  rectElement.setAttribute("x", "0");
-  rectElement.setAttribute("y", "0");
-  rectElement.setAttribute("width", (textWidth + 6).toString());
-  rectElement.setAttribute("height", "100%");
-  rectElement.setAttribute("stroke", "none");
-  rectElement.setAttribute("fill", "#fff");
+  const gElement = window.document.createElementNS(svgNs, "g");
+  gElement.appendChild(textElement);
+  gElement.appendChild(arrowElement);
 
-  const arrowElement = createArrowElement(
-    0,
-    textHeight / 2,
-    width,
-    textHeight / 2
-  );
-
-  svgElement.setAttribute("height", textHeight.toString());
-
-  svgElement.appendChild(arrowElement);
-  svgElement.appendChild(rectElement);
-  svgElement.appendChild(textElement);
-
-  return svgElement;
+  return gElement;
 };
 
 export const paint = (
@@ -146,7 +135,17 @@ export const paint = (
       basePtrTexts.unshift("$rsp");
     }
     const basePtrText = basePtrTexts.join(", ");
-    const basePtrTextEle = createLabelPointerElement(basePtrText, 100);
+    const basePtrStartX = 90;
+    const basePtrStartY = 20;
+    const basePtrLength = 90;
+    const basePtrTextEle = createLabelPointerElement(
+      basePtrText,
+      basePtrStartX,
+      basePtrStartY,
+      basePtrStartX + basePtrLength,
+      basePtrStartY,
+      "start"
+    );
 
     svgElement.appendChild(basePtrTextEle);
   }
