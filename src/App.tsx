@@ -1,4 +1,3 @@
-import "./App.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import {
   AppBar,
@@ -18,7 +17,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { nameOfProduct } from "./resources/theme-resources";
 import React, { useState } from "react";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
-import MailIcon from "@mui/icons-material/Mail";
+import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import ViewStreamIcon from "@mui/icons-material/ViewStream";
 
 const queryClient = new QueryClient();
 
@@ -81,18 +81,12 @@ function App() {
                 entryGroups={[
                   [
                     {
-                      text: "Inbox",
-                      icon: <InboxIcon />,
+                      text: "Red Black Tree",
+                      icon: <AccountTreeIcon />,
                     },
                     {
-                      text: "Starred",
-                      icon: <MailIcon />,
-                    },
-                  ],
-                  [
-                    {
-                      text: "All mail",
-                      icon: <InboxIcon />,
+                      text: "Stack",
+                      icon: <ViewStreamIcon />,
                     },
                   ],
                 ]}
