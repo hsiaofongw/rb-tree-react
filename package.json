@@ -42,6 +42,7 @@
     "jest": "^27.4.3",
     "jest-resolve": "^27.4.2",
     "jest-watch-typeahead": "^1.0.0",
+    "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.4.5",
     "monaco-editor": "^0.34.1",
     "monaco-editor-webpack-plugin": "^7.0.1",
@@ -98,7 +99,8 @@
     ]
   },
   "devDependencies": {
-    "@types/d3": "^7.4.0"
+    "@types/d3": "^7.4.0",
+    "@types/lodash": "^4.14.191"
   },
   "jest": {
     "roots": [
