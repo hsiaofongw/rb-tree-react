@@ -4,12 +4,13 @@ import { editor } from "monaco-editor";
 import { Editor } from "../components/Editor";
 import { useTreeNode } from "../hooks/useTreeNode";
 import { useTsTemplateContent } from "../hooks/useTsTemplateContent";
-import { Tree } from "../components/Tree";
+import { StructureVisualize } from "../components/StructureVisualize";
 import LoadingButton from "@mui/lab/LoadingButton";
 import SaveIcon from "@mui/icons-material/Save";
 import { downloadFile, getEscapedTimestamp } from "../utils/downloadFile";
 import { Resizable } from "re-resizable";
 import { HelpEntry } from "../components/HelpEntry";
+import { paint } from "../rb-tree/layout";
 
 export const useRevealLineIdx = (
   targetLinePrefix: string,
@@ -50,7 +51,12 @@ export const RBTree = () => {
       }}
     >
       <Box sx={{ flex: 1, overflow: "hidden" }}>
-        <Tree root={root} svgId={svgId} />
+        <StructureVisualize
+          paint={(svgElement, divRef) => {
+            paint(svgElement, root, divRef.current?.clientWidth ?? 100, 80, 16);
+            svgElement.setAttribute("id", svgId);
+          }}
+        />
       </Box>
       <Resizable
         minWidth={420}
