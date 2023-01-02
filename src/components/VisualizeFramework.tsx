@@ -86,7 +86,7 @@ export const VisualizeFrameWork = (props: {
                 onClick={() => {
                   const codeContent = editorRef.current?.getValue() ?? "";
                   const timestamp = getEscapedTimestamp();
-                  const codeFileName = `red-black-tree-code-${timestamp}.ts`;
+                  const codeFileName = `code-${timestamp}.ts`;
                   downloadFile(codeContent, codeFileName);
                 }}
               >
