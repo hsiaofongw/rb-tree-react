@@ -5,33 +5,6 @@ import { Stack } from "./types";
 const defaultHorizontalGap = 6;
 const defaultStrokeWidth = 1;
 
-const getSvgElementWidth = (
-  svgElement: SVGGElement | SVGTextElement
-): { width: number; height: number } | undefined => {
-  const measureSvgEle = window.document.createElementNS(svgNs, "svg");
-  const measureSvgEleWidth = 100;
-  const measureSvgEleHeight = 100;
-  measureSvgEle.setAttribute(
-    "style",
-    `position: fixed; top: -${measureSvgEleHeight}px; left: -${measureSvgEleWidth}px`
-  );
-  measureSvgEle.setAttribute("width", measureSvgEleWidth.toString());
-  measureSvgEle.setAttribute("height", measureSvgEleHeight.toString());
-  window.document.body.appendChild(measureSvgEle);
-
-  measureSvgEle.appendChild(svgElement);
-
-  const bbox = svgElement.getBBox();
-
-  if (bbox) {
-    const box = { width: bbox.width, height: bbox.height };
-    measureSvgEle.remove();
-    return box;
-  }
-
-  measureSvgEle.remove();
-};
-
 const pointsToString = (points: number[][]): string => {
   return points.map(([x, y]) => `${x},${y}`).join(" ");
 };
