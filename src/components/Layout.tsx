@@ -1,9 +1,9 @@
 import { AppBar, Box, Toolbar, Typography } from "@mui/material";
-import { nameOfProduct } from "./resources/theme-resources";
+import { nameOfProduct } from "../resources/theme-resources";
 import React, { useContext } from "react";
-import { DrawerEntry } from "./components/DrawerEntry";
-import { MenuEntry } from "./types";
-import { MenuEntryContext } from "./providers/MenuEntryProvider";
+import { DrawerEntry } from "./DrawerEntry";
+import { MenuEntry } from "../types";
+import { MenuEntryContext } from "../providers/MenuEntryProvider";
 
 export const Layout = (props: { children: React.ReactNode }) => {
   const entryGroups = useContext<MenuEntry[][]>(MenuEntryContext);
