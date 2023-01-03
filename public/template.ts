@@ -334,22 +334,16 @@ export const deleteNode = <KeyT, ValueT>(
 // Start user codes
 // ========
 
-let root: TreeNode<string, string> = {
-  isRed: false,
-  key: "c",
-  left: {
-    isRed: false,
-    key: "b",
-    left: {
-      isRed: true,
-      key: "a",
-    },
-  },
-  right: {
-    isRed: false,
-    key: "d",
-  },
-};
+let root: TreeNode<string, string>;
+
+for (let i = 0; i < 10; ++i) {
+  const key = i.toString();
+  root = insertPair(root, key, key);
+}
+
+root = deleteNode(root, "9");
+root = deleteNode(root, "4");
+root = deleteNode(root, "0");
 
 // ========
 // End user codes
