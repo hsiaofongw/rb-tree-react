@@ -91,7 +91,7 @@ export const moveRightSibilingToLeft = <KeyT, ValueT>(
   root: TreeNode<KeyT, ValueT>
 ): TreeNode<KeyT, ValueT> => {
   if (root) {
-    root.right = rotateLeft(root.left);
+    root.right = rotateRight(root.right);
     root = unSplit(root);
     root = rotateLeft(root);
     root = split(root);
