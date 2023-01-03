@@ -32,23 +32,23 @@ export const deleteMin = <KeyT, ValueT>(
   }
 };
 
+const deleteRight = <KeyT, ValueT>(root: TreeNode<KeyT, ValueT>) => {
+  if (root?.right) {
+    root.right = deleteMax(root.right);
+    return reconcile(root);
+  }
+};
+
 export const deleteMax = <KeyT, ValueT>(
   root: TreeNode<KeyT, ValueT>
 ): TreeNode<KeyT, ValueT> => {
-  const deleteRight: NodeToNode<KeyT, ValueT> = (root) => {
-    if (root?.right) {
-      root.right = deleteMax(root.right);
-      return reconcile(root);
-    }
-  };
-
   if (root?.right) {
     if (isRed(root?.right) || isRed(root?.right?.left)) {
       return deleteRight(root);
     }
 
     if (isRed(root?.left)) {
-      return deleteRight(rotateRight(root));
+      return deleteMax(rotateRight(root));
     }
 
     if (isRed(root?.left?.left)) {
@@ -56,6 +56,9 @@ export const deleteMax = <KeyT, ValueT>(
     }
 
     return deleteRight(unSplit(root));
+  } else if (root?.left) {
+    root.left.isRed = false;
+    return root.left;
   }
 };
 
