@@ -1,1 +1,1 @@
-export const nameOfProduct = "Data Structure Visualization Platform";
+export const nameOfProduct = "Data Structure Visualization Toolbox";

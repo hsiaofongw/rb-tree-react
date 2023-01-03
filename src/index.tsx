@@ -9,7 +9,7 @@ import { RBTree } from "./pages/RBTree";
 import { RedirectToExternalSite } from "./components/RedirectToExternalSite";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import ViewStreamIcon from "@mui/icons-material/ViewStream";
-
+import Grid4x4Icon from "@mui/icons-material/Grid4x4";
 import HomeIcon from "@mui/icons-material/Home";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import {
@@ -20,6 +20,7 @@ import {
 import { MenuEntry } from "./types";
 import { MenuEntryContext } from "./providers/MenuEntryProvider";
 import { StackVisualize } from "./pages/StackVisualize";
+import { Box } from "@mui/material";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -52,6 +53,14 @@ const router = createBrowserRouter([
     ),
   },
   {
+    path: "/union-find",
+    element: (
+      <Layout>
+        <Box>Union Find</Box>
+      </Layout>
+    ),
+  },
+  {
     path: "redirect-to-external-site",
     element: <RedirectToExternalSite />,
   },
@@ -71,6 +80,11 @@ const entryGroups: MenuEntry[][] = [
       text: "Red Black Tree",
       icon: <AccountTreeIcon />,
       to: "/rb-tree",
+    },
+    {
+      text: "Union Find",
+      icon: <Grid4x4Icon />,
+      to: "/union-find",
     },
     {
       text: "Stack",
