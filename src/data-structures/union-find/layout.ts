@@ -128,24 +128,23 @@ const doPaint = (props: {
         .attr("alignment-baseline", "central")
     );
 
-  const bindChildNodesG = gSelection
+  gSelection
     .selectAll("g")
-    .data((d) => d.children, keyFunction);
-
-  bindChildNodesG.join((enter) =>
-    enter.each(function (d, i, nodes) {
-      const gSelection = select(this).datum(d).append("g");
-      const childWidth = width / nodes.length;
-      const childX = childWidth * i;
-      const childY = y + height;
-      doPaint({
-        gSelection,
-        level: level + 1,
-        x: childX,
-        y: childY,
-        height,
-        width: childWidth,
-      });
-    })
-  );
+    .data((d) => d.children, keyFunction)
+    .join((enter) =>
+      enter.each(function (d, i, nodes) {
+        const gSelection = select(this).datum(d).append("g");
+        const childWidth = width / nodes.length;
+        const childX = childWidth * i;
+        const childY = y + height;
+        doPaint({
+          gSelection,
+          level: level + 1,
+          x: childX,
+          y: childY,
+          height,
+          width: childWidth,
+        });
+      })
+    );
 };
